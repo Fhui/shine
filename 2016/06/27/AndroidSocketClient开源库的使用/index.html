@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="android," />
 
 
 
@@ -77,23 +77,25 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
 
 
 
 
 
 
-<meta name="description">
+<meta name="description" content="我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈">
 <meta property="og:type" content="article">
 <meta property="og:title" content=" AndroidSocketClient开源库的使用 ">
 <meta property="og:url" content="http://yoursite.com/2016/06/27/AndroidSocketClient开源库的使用/index.html">
 <meta property="og:site_name" content="HIMan">
-<meta property="og:description">
-<meta property="og:updated_time" content="2016-06-27T06:03:52.000Z">
+<meta property="og:description" content="我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈">
+<meta property="og:image" content="http://img.blog.csdn.net/20160519111525096">
+<meta property="og:updated_time" content="2016-06-27T08:00:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content=" AndroidSocketClient开源库的使用 ">
-<meta name="twitter:description">
+<meta name="twitter:description" content="我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160519111525096">
 
 
 
@@ -266,7 +268,51 @@
       
 
       
-        
+        <p>我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈<img src="http://img.blog.csdn.net/20160519111525096" alt="这里写图片描述"></p>
+<a id="more"></a>
+<p>我给大家推荐一个socketclient库，用起来特别方便，主要是源于前几天公司需要长连接，正好逛GitHub的时候发现的这个库，挺爽挺方便的，推荐给大家。</p>
+<p>git:<a href="https://github.com/vilyever/AndroidSocketClient" target="_blank" rel="external">https://github.com/vilyever/AndroidSocketClient</a></p>
+<p>下载完导入，然后再gradle中添加        </p>
+<pre><code>                repositories {
+              maven { url &quot;https://jitpack.io&quot; }
+              }
+              dependencies {
+  compile &apos;com.github.vilyever:AndroidSocketClient:1.4.1&apos;
+}
+</code></pre><p>至于用法也是非常简单</p>
+<pre><code>private SocketClient socketClient;
+</code></pre><p>创建scoketClient.</p>
+<pre><code>socketClient = new SocketClient(url, prot);
+</code></pre><p>里面传入socketClient的url地址和端口号。<br>                socketClient.registerSocketDelegate(new SocketClient.SocketDelegate(){</p>
+<pre><code>    @Override
+    public void onConnected(SocketClient client) {
+        socketClient.send(&quot;hello, server !---------------------------&gt;Android&quot;);
+        socketClient.setHeartBeatMessage(&quot;hello, server !---------------------------&gt;Android&quot;);
+    }
+
+    @Override
+    public void onDisconnected(SocketClient client) {
+        Log.i(&quot;Server&quot;, &quot;timeout&quot;);
+        String error = client.getCharsetName();
+        Log.i(&quot;Server&quot;, &quot;timeoutData:&quot;+error);
+
+    }
+
+    @Override
+    public void onResponse(SocketClient client, @NonNull SocketResponsePacket responsePacket) {
+        String responseMsg = responsePacket.getMessage();
+        int i = 1;
+        Log.i(&quot;Server&quot;, responseMsg);
+    }
+});
+</code></pre><p>这个方法直接实现了socket发送信息到服务器，在onDisconnected()错误信息也可以及时返回并打印。</p>
+<pre><code>socketClient.setConnectionTimeout(1000 * 15);
+socketClient.setHeartBeatInterval(1000);
+socketClient.setRemoteNoReplyAliveTimeout(1000 * 60);
+socketClient.setCharsetName(&quot;UTF-8&quot;);
+socketClient.connect();
+</code></pre><p>这边设置的是超时时间，心跳包的间隔， 自动连接时间，编码格式。<br>是不是用起来特别爽？<br>因为库也是国人写的，注释都是中文，大家可以扒一扒源代码看如何实现， 毕竟学东西不只是学如何使用，还要追求原理的。</p>
+
       
     </div>
 
@@ -284,6 +330,12 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+        </div>
       
 
       
@@ -368,7 +420,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

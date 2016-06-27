@@ -77,23 +77,29 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
 
 
 
 
 
 
-<meta name="description">
+<meta name="description" content="说起Android适配，大家是不是觉得特别头疼，但是Android适配技能是每个Android程序员必备的，也是面试中会必须问到的。适配的方式有好多种，什么图片适配啊，布局适配啊，当然还有现在的开源框架，当然，或许有人说，平常写代码注意使用比例，禁止使用AbstractLayout, 等等，但是都做不到好的适配方式。所以我给大家推荐一种dimen适配，也是上次看了鸿神的博客自己做个总结。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android适配--dimen ">
 <meta property="og:url" content="http://yoursite.com/2016/06/27/Android适配-dimen/index.html">
 <meta property="og:site_name" content="HIMan">
-<meta property="og:description">
-<meta property="og:updated_time" content="2016-06-27T06:04:21.000Z">
+<meta property="og:description" content="说起Android适配，大家是不是觉得特别头疼，但是Android适配技能是每个Android程序员必备的，也是面试中会必须问到的。适配的方式有好多种，什么图片适配啊，布局适配啊，当然还有现在的开源框架，当然，或许有人说，平常写代码注意使用比例，禁止使用AbstractLayout, 等等，但是都做不到好的适配方式。所以我给大家推荐一种dimen适配，也是上次看了鸿神的博客自己做个总结。">
+<meta property="og:image" content="http://img.blog.csdn.net/20160520091424204">
+<meta property="og:image" content="http://img.blog.csdn.net/20160520091439660">
+<meta property="og:image" content="http://img.blog.csdn.net/20160520093850197">
+<meta property="og:image" content="http://img.blog.csdn.net/20160520094017383">
+<meta property="og:image" content="http://img.blog.csdn.net/20160520095002708">
+<meta property="og:updated_time" content="2016-06-27T08:00:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android适配--dimen ">
-<meta name="twitter:description">
+<meta name="twitter:description" content="说起Android适配，大家是不是觉得特别头疼，但是Android适配技能是每个Android程序员必备的，也是面试中会必须问到的。适配的方式有好多种，什么图片适配啊，布局适配啊，当然还有现在的开源框架，当然，或许有人说，平常写代码注意使用比例，禁止使用AbstractLayout, 等等，但是都做不到好的适配方式。所以我给大家推荐一种dimen适配，也是上次看了鸿神的博客自己做个总结。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160520091424204">
 
 
 
@@ -266,7 +272,11 @@
       
 
       
-        
+        <p>说起Android适配，大家是不是觉得特别头疼，但是Android适配技能是每个Android程序员必备的，也是面试中会必须问到的。<br>适配的方式有好多种，什么图片适配啊，布局适配啊，当然还有现在的开源框架，当然，或许有人说，平常写代码注意使用比例，禁止使用AbstractLayout, 等等，但是都做不到好的适配方式。<br>所以我给大家推荐一种dimen适配，也是上次看了鸿神的博客自己做个总结。<br><img src="http://img.blog.csdn.net/20160520091424204" alt="这里写图片描述"></p>
+<a id="more"></a>
+<p>在这儿我推荐鸿洋大神的dimen适配神器<br>下载地址:<a href="https://github.com/hongyangAndroid/Android_Blog_Demos/tree/master/blogcodes/src/main/java/com/zhy/blogcodes/genvalues" target="_blank" rel="external">https://github.com/hongyangAndroid/Android_Blog_Demos/tree/master/blogcodes/src/main/java/com/zhy/blogcodes/genvalues</a></p>
+<p>下载进去找到autoLayout.jar双击生成，拷入res目录<br>其实内部是这样的<br><img src="http://img.blog.csdn.net/20160520091439660" alt="这里写图片描述"><br>当美工给我们设计图都标注好的时候，我相信大多数都是px为单位的，假如美工给我们的分辨率是1334x750的分辨率，然而我们的适配最低分辨率是400x320如图<br><img src="http://img.blog.csdn.net/20160520093850197" alt="这里写图片描述"><br>在图中我们可以看到x1相当于1px<br>，然而我们目前适配最高分辨率是2560x1440<br><img src="http://img.blog.csdn.net/20160520094017383" alt="这里写图片描述"><br>我们可以看到x1相当于4.5px， 看到这儿我们大概清楚了dimen适配的原理了吧？<br>使用的时候直接@dimen/** 这样算出来的像素基本就是固定在那个像素点上了，无论是在平板还是手机，都基本差不多。<br>就像刚才说的， 美工给我们1334x750分辨率的图片，我们改如何计算？<br>应该是高度@dimen / px /（1334 / 400）， 宽度@dimen / px / (750 / 320)<br>这样算出来的值还算是比较准确，基本是本大多数机型，就是比较麻烦，但是作为程序员的我们，完全可以自己写一个程序嘛，输入数字直接得出计算后的值，其实也还好。<br><img src="http://img.blog.csdn.net/20160520095002708" alt="这里写图片描述">那就先这样咯。</p>
+
       
     </div>
 
@@ -368,7 +378,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

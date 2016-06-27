@@ -1,0 +1,572 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hexo," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="推荐大家购买一个域名，这样使用起来方便的多。购买域名有好多种方式，为了避免冲突，大家自行购买。另外博主使用的是mac，所以，今天的教程主题是mac系统，不过windows系统大同小异，原理是一样的，只不过Mac集成了不少环境，变得更方便。因为hexo基于node.js,所以我们直接下载nodejs。当然也得下载Git, 因为我们是结合Github吗，所以工具是少一不可。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac上使用Hexo+github搭建自己的博客">
+<meta property="og:url" content="http://yoursite.com/2016/06/27/Mac上使用Hexo-github搭建自己的博客/index.html">
+<meta property="og:site_name" content="HIMan">
+<meta property="og:description" content="推荐大家购买一个域名，这样使用起来方便的多。购买域名有好多种方式，为了避免冲突，大家自行购买。另外博主使用的是mac，所以，今天的教程主题是mac系统，不过windows系统大同小异，原理是一样的，只不过Mac集成了不少环境，变得更方便。因为hexo基于node.js,所以我们直接下载nodejs。当然也得下载Git, 因为我们是结合Github吗，所以工具是少一不可。">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627162706968">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627162921475">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627163145380">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627165322083">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627165451830">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627165543289">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627165639534">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627165811003">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627170225614">
+<meta property="og:image" content="http://img.blog.csdn.net/20160627170356193">
+<meta property="og:updated_time" content="2016-06-27T09:13:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mac上使用Hexo+github搭建自己的博客">
+<meta name="twitter:description" content="推荐大家购买一个域名，这样使用起来方便的多。购买域名有好多种方式，为了避免冲突，大家自行购买。另外博主使用的是mac，所以，今天的教程主题是mac系统，不过windows系统大同小异，原理是一样的，只不过Mac集成了不少环境，变得更方便。因为hexo基于node.js,所以我们直接下载nodejs。当然也得下载Git, 因为我们是结合Github吗，所以工具是少一不可。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160627162706968">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/27/Mac上使用Hexo-github搭建自己的博客/"/>
+
+  <title> Mac上使用Hexo+github搭建自己的博客 | HIMan </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">HIMan</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">no bug good life !</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mac上使用Hexo+github搭建自己的博客
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-27T16:13:36+08:00" content="2016-06-27">
+              2016-06-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>推荐大家购买一个域名，这样使用起来方便的多。购买域名有好多种方式，为了避免冲突，大家自行购买。另外博主使用的是mac，所以，今天的教程主题是mac系统，不过windows系统大同小异，原理是一样的，只不过Mac集成了不少环境，变得更方便。<br>因为hexo基于node.js,<br>所以我们直接下载<a href="https://nodejs.org/en/" target="_blank" rel="external">nodejs</a>。<br>当然也得下载<a href="https://git-scm.com/" target="_blank" rel="external">Git</a>, 因为我们是结合Github吗，所以工具是少一不可。</p>
+<a id="more"></a>
+<p>安装好，开始安装hexo，<br>控制台－－&gt; <code>sudo npm install -g hexo</code> 自动安装<br>找一个比较显著的位置建立一个文件夹, 楼主是强迫症，所以在applications里面创建的文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /applications/hexo</span><br></pre></td></tr></table></figure>
+<p>进入这个hexo文件夹目录下，然后<code>hexo init</code></p>
+<p>初始化hexo，它会生成一大堆静态网站文件。</p>
+<p>这时候在<code>hexo server</code></p>
+<p>它会给你一个ip地址，然后你直接copy到浏览器访问就能看到欢迎页面”hello world”了</p>
+<p>接着输入－－&gt; <code>hexo init</code><br>最好在写一下这个指令－－&gt; <code>npm install hexo-deployer-git --save</code></p>
+<p>为了防止最后部署到Github上面的时候出现 <code>Deployer not found: github</code>或者部署到服务器的时候出现错误所以最好搞一下。</p>
+<p>好了，这个时候我们基本搞好了，其他的都先不管，我们先部署到Github上再说。前方高能预警！<br><img src="http://img.blog.csdn.net/20160627162706968" alt="这里写图片描述"><br>首先我们登录Github<br><img src="http://img.blog.csdn.net/20160627162921475" alt="这里写图片描述"><br>登录成功后点击创建一个新的仓库<br><img src="http://img.blog.csdn.net/20160627163145380" alt="这里写图片描述"><br>输入仓库名以及描述，接着创建成功。<br>好，我们此时再回到终端创建私钥与我们创建的远程仓库进行关联。<br>我们首先输入<code>cd ~/.ssh</code>看看是否有安装过这个ssh私钥如果没有会提示没有找到文件。<br>其中会让你输入一次密码，四位数以上的，谨记，以后会用到。<br>接着输入<code>ssh-keygen -t rsa -C &quot;email&quot;</code><br>然后它会出现这个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/HIMan/.ssh/id_rsa):</span><br></pre></td></tr></table></figure>
+<p>就是询问你的ssh保存到哪儿，以及让你输入你的id_rsa，你可以自定义id_rsa但是最好不要改变路径，要不然后面会变得特别恶心。<br>好了，然后打开Finder找到保存的公钥，然后打开Github仓库，点击setting，然后创建一个ssh， 然后吧公钥的内容复制进去。<br>这时候已经连接成功。<br>现在回到Github<br><img src="http://img.blog.csdn.net/20160627165322083" alt="这里写图片描述"><br>打开我们创建的仓库，点击设置，找到Github pages选项，然后点击大按钮<br><img src="http://img.blog.csdn.net/20160627165451830" alt="这里写图片描述"><br>然后选择一个内容体，点击create<br><img src="http://img.blog.csdn.net/20160627165543289" alt="这里写图片描述"><br>然后选择主题点击publish page<br>这时候我们就生成完毕了。<br>然后Github会给我们自动创建一个分支<br><img src="http://img.blog.csdn.net/20160627165639534" alt="这里写图片描述"><br>这时候我们在gh-pages里面打开设置，我们可以看到Github page已经创建完成，并且给我们生成了这个连接。<br><img src="http://img.blog.csdn.net/20160627165811003" alt="这里写图片描述"><br>到此为止我们的Github page已经创建完成。<br>这时候我们再来到hexo。<br>打开终端输入指令<code>hexo generate</code>会生成一套静态网页，在你创建hexo的文件夹下面生成了一个public文件夹，里面全部都是静态网页文件。<br>这时候我们创建一个文件夹作为Github的仓库。博主用的不是命令而是sourcetree，比较简单，然后我们打开sourcetree<br>， 创建新仓库，选择添加已存在的本地仓库<br><img src="http://img.blog.csdn.net/20160627170225614" alt="这里写图片描述"><br>路径就写你仓库的路径，然后创建完毕后打开，点击设置，将Github上的ssh地址拿到，<br><img src="http://img.blog.csdn.net/20160627170356193" alt="这里写图片描述"><br>然后创建远程仓库，将此ssh地址输进去即可。<br>这时候把刚才创建的public 文件夹下的文件全部复制进去，然后更新－－推送。如果出错那就是sourcetree没有关联此ssh, 那么我们重新写命令关联。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~/.ssh/ID_rsa</span><br></pre></td></tr></table></figure>
+<p>后面跟着的就是你创建的ssh<br>然后推送上去，这时候在访问Github给你提供的地址就是你创建的这个hexo的index了。<br>现在再来说说绑定域名的问题。<br>域名可以在好多地方买到，我感觉最好不要在国外的网站买，怕不怕被墙？我选的是dnspod，进入官网需要注册一个，然后在里面购买一个域名，点击域名解析，如果你购买了域名它会自动给你创建，如果没有活着在别的途径购买点击添加域名即可，很简单。<br>然后点击添加记录，<br>@    A    192.30.252.153</p>
+<p>@    A    192.30.252.154</p>
+<p>www        CNAME    <em>*</em>.github.io<br>添加这三个地址，然后我们在回到Github里面找到我们的这个仓库，创建一个文件就叫CNAME，里面就写我们创建的域名即可。</p>
+<p>然后漫长的等待－－－－－－－－－－－－－－－</p>
+<p>等待解析完毕，就可以访问试试看了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag">#hexo</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/27/RXjava入门/" rel="next" title="RXjava入门">
+                <i class="fa fa-chevron-left"></i> RXjava入门
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/headimg.JPG"
+               alt="HIMan" />
+          <p class="site-author-name" itemprop="name">HIMan</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HIMan</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

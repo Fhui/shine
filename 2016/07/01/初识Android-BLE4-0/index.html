@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="“HIMan,hi,man”" />
+  <meta name="keywords" content="android," />
 
 
 
@@ -84,12 +84,12 @@
 
 
 
-<meta name="description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其">
+<meta name="description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HIMan">
-<meta property="og:url" content="http://yoursite.com/2016/07/01/Android初识BLE4-0/index.html">
+<meta property="og:title" content="初识Android BLE4.0">
+<meta property="og:url" content="http://yoursite.com/2016/07/01/初识Android-BLE4-0/index.html">
 <meta property="og:site_name" content="HIMan">
-<meta property="og:description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其">
+<meta property="og:description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。">
 <meta property="og:image" content="http://img.blog.csdn.net/20160701110855824">
 <meta property="og:image" content="http://img.blog.csdn.net/20160701111240374">
 <meta property="og:image" content="http://img.blog.csdn.net/20160701111518530">
@@ -101,10 +101,10 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20160701150005439">
 <meta property="og:image" content="http://img.blog.csdn.net/20160701151245279">
 <meta property="og:image" content="http://img.blog.csdn.net/20160701153344766">
-<meta property="og:updated_time" content="2016-07-01T08:21:06.000Z">
+<meta property="og:updated_time" content="2016-07-01T08:32:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HIMan">
-<meta name="twitter:description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其">
+<meta name="twitter:title" content="初识Android BLE4.0">
+<meta name="twitter:description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20160701110855824">
 
 
@@ -126,9 +126,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/07/01/Android初识BLE4-0/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/01/初识Android-BLE4-0/"/>
 
-  <title>  | HIMan </title>
+  <title> 初识Android BLE4.0 | HIMan </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -238,7 +238,7 @@
             
             
               
-                
+                初识Android BLE4.0
               
             
           </h1>
@@ -250,7 +250,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-01T15:37:12+08:00" content="2016-07-01">
+            <time itemprop="dateCreated" datetime="2016-07-01T16:31:52+08:00" content="2016-07-01">
               2016-07-01
             </time>
           </span>
@@ -261,8 +261,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/01/Android初识BLE4-0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/Android初识BLE4-0/" itemprop="commentsCount"></span>
+                <a href="/2016/07/01/初识Android-BLE4-0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/初识Android-BLE4-0/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -285,7 +285,9 @@
       
 
       
-        <p>随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。<br>在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开<a href="https://developer.android.com/guide/topics/connectivity/bluetooth-le.html#terms" target="_blank" rel="external">官方文档</a>查阅资料了。<br><img src="http://img.blog.csdn.net/20160701110855824" alt="这里写图片描述"><br>打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其的一番介绍，现在分为经典蓝牙和低功耗蓝牙(BLE4.0), 然而现在都是BLE4.0，所以我们直接去看BLE4.0.<br><img src="http://img.blog.csdn.net/20160701111240374" alt="这里写图片描述"><br>大概就是低功耗蓝牙是从api18开始添加进去的，可以用于一些设备的使用…<br><img src="http://img.blog.csdn.net/20160701111518530" alt="这里写图片描述"><br>提供了一些概念的介绍<br>首先在使用蓝牙之前需要在清单文件中添加权限</p>
+        <p>随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。<br>在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开<a href="https://developer.android.com/guide/topics/connectivity/bluetooth-le.html#terms" target="_blank" rel="external">官方文档</a>查阅资料了。<br><img src="http://img.blog.csdn.net/20160701110855824" alt="这里写图片描述"></p>
+<a id="more"></a>
+<p>打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其的一番介绍，现在分为经典蓝牙和低功耗蓝牙(BLE4.0), 然而现在都是BLE4.0，所以我们直接去看BLE4.0.<br><img src="http://img.blog.csdn.net/20160701111240374" alt="这里写图片描述"><br>大概就是低功耗蓝牙是从api18开始添加进去的，可以用于一些设备的使用…<br><img src="http://img.blog.csdn.net/20160701111518530" alt="这里写图片描述"><br>提供了一些概念的介绍<br>首先在使用蓝牙之前需要在清单文件中添加权限</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.BLUETOOTH&quot;/&gt;</span><br><span class="line">&lt;uses-permission android:name=&quot;android.permission.BLUETOOTH_ADMIN&quot;/&gt;</span><br></pre></td></tr></table></figure>
 <p>然后Google给我们提供了关键类的查看<br><img src="http://img.blog.csdn.net/20160701111900641" alt="这里写图片描述"><br>我们先来看BluetoothAdapter<br>这个类就是ble连接主要大类之一，好多关键操作都在这个类中进行操作。<br><img src="http://img.blog.csdn.net/20160701114923483" alt="这里写图片描述"><br>官方给的描述就是这是一个蓝牙适配器。可以实例化bluetoothDevice和BluetoothSocket<br>下面我来介绍下如何使用:在使用BLE4.0之前最好友好的检查一下蓝牙是否可用，是否支持BLE4.0设备。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 设备是否支持BLE4.0</span><br><span class="line"> * @time 2016/6/17 0017 10:59</span><br><span class="line"> */</span><br><span class="line">public boolean judgeBuletooh() &#123;</span><br><span class="line">	if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) &#123;</span><br><span class="line">		return false;</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		return true;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -353,6 +355,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
@@ -390,8 +398,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/01/Android初识BLE4-0/"
-           data-title="" data-url="http://yoursite.com/2016/07/01/Android初识BLE4-0/">
+      <div class="ds-thread" data-thread-key="2016/07/01/初识Android-BLE4-0/"
+           data-title="初识Android BLE4.0" data-url="http://yoursite.com/2016/07/01/初识Android-BLE4-0/">
       </div>
     
   </div>

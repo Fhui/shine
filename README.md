@@ -1,2 +1,0 @@
-# himan-hexo
-Hexo

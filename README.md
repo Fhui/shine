@@ -1,7 +1,7 @@
 # himan-hexo
 Hexo
 
-博客地址：nexthiman.com
+博客地址:http://nexthiman.com
 
 基于hexo搭建个人博客网站。
 

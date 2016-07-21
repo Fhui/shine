@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="android," />
+  <meta name="keywords" content="“HIMan,hi,man”" />
 
 
 
@@ -84,18 +84,15 @@
 
 
 
-<meta name="description" content="我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈">
-<meta property="og:type" content="article">
-<meta property="og:title" content=" AndroidSocketClient开源库的使用 ">
-<meta property="og:url" content="http://yoursite.com/2016/06/27/AndroidSocketClient开源库的使用/index.html">
+<meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HIMan">
+<meta property="og:url" content="http://yoursite.com/archives/2016/page/2/index.html">
 <meta property="og:site_name" content="HIMan">
-<meta property="og:description" content="我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈">
-<meta property="og:image" content="http://img.blog.csdn.net/20160519111525096">
-<meta property="og:updated_time" content="2016-06-27T08:00:02.000Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" AndroidSocketClient开源库的使用 ">
-<meta name="twitter:description" content="我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160519111525096">
+<meta name="twitter:title" content="HIMan">
+<meta name="twitter:description">
 
 
 
@@ -116,9 +113,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/06/27/AndroidSocketClient开源库的使用/"/>
+  <link rel="canonical" href="http://yoursite.com/archives/2016/page/2/"/>
 
-  <title>  AndroidSocketClient开源库的使用  | HIMan </title>
+  <title> 归档 | HIMan </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -139,7 +136,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left  page-archive  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -207,196 +204,70 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-collapse">
+    <span class="archive-move-on"></span>
+
+    <span class="archive-page-counter">
+      
+      
+      
+        
+      
+      嗯..! 目前共计 11 篇日志。 继续努力。
+    </span>
+
     
 
-  
-  
+      
+      
+      
 
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
+      
         
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
+        </div>
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
+            <a class="post-title-link" href="/2016/06/27/Volley以及自定义Request详解/" itemprop="url">
               
-                 AndroidSocketClient开源库的使用 
+                <span itemprop="name">Volley以及自定义Request详解</span>
               
-            
-          </h1>
+            </a>
         
+      </h1>
 
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-27T14:03:52+08:00" content="2016-06-27">
-              2016-06-27
-            </time>
-          </span>
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2016-06-27T14:02:54+08:00"
+              content="2016-06-27" >
+          06-27
+        </time>
+      </div>
 
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/27/AndroidSocketClient开源库的使用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/27/AndroidSocketClient开源库的使用/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈<img src="http://img.blog.csdn.net/20160519111525096" alt="这里写图片描述"></p>
-<a id="more"></a>
-<p>我给大家推荐一个socketclient库，用起来特别方便，主要是源于前几天公司需要长连接，正好逛GitHub的时候发现的这个库，挺爽挺方便的，推荐给大家。</p>
-<p>git:<a href="https://github.com/vilyever/AndroidSocketClient" target="_blank" rel="external">https://github.com/vilyever/AndroidSocketClient</a></p>
-<p>下载完导入，然后再gradle中添加        </p>
-<pre><code>                repositories {
-              maven { url &quot;https://jitpack.io&quot; }
-              }
-              dependencies {
-  compile &apos;com.github.vilyever:AndroidSocketClient:1.4.1&apos;
-}
-</code></pre><p>至于用法也是非常简单</p>
-<pre><code>private SocketClient socketClient;
-</code></pre><p>创建scoketClient.</p>
-<pre><code>socketClient = new SocketClient(url, prot);
-</code></pre><p>里面传入socketClient的url地址和端口号。<br>                socketClient.registerSocketDelegate(new SocketClient.SocketDelegate(){</p>
-<pre><code>    @Override
-    public void onConnected(SocketClient client) {
-        socketClient.send(&quot;hello, server !---------------------------&gt;Android&quot;);
-        socketClient.setHeartBeatMessage(&quot;hello, server !---------------------------&gt;Android&quot;);
-    }
-
-    @Override
-    public void onDisconnected(SocketClient client) {
-        Log.i(&quot;Server&quot;, &quot;timeout&quot;);
-        String error = client.getCharsetName();
-        Log.i(&quot;Server&quot;, &quot;timeoutData:&quot;+error);
-
-    }
-
-    @Override
-    public void onResponse(SocketClient client, @NonNull SocketResponsePacket responsePacket) {
-        String responseMsg = responsePacket.getMessage();
-        int i = 1;
-        Log.i(&quot;Server&quot;, responseMsg);
-    }
-});
-</code></pre><p>这个方法直接实现了socket发送信息到服务器，在onDisconnected()错误信息也可以及时返回并打印。</p>
-<pre><code>socketClient.setConnectionTimeout(1000 * 15);
-socketClient.setHeartBeatInterval(1000);
-socketClient.setRemoteNoReplyAliveTimeout(1000 * 60);
-socketClient.setCharsetName(&quot;UTF-8&quot;);
-socketClient.connect();
-</code></pre><p>这边设置的是超时时间，心跳包的间隔， 自动连接时间，编码格式。<br>是不是用起来特别爽？<br>因为库也是国人写的，注释都是中文，大家可以扒一扒源代码看如何实现， 毕竟学东西不只是学如何使用，还要追求原理的。</p>
-
-      
-    </div>
-
-    <div>
-      
-        
-      
-    </div>
-
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="/images/wx.JPG" alt="HIMan WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="/images/zfb.JPG" alt="HIMan Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
-
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/android/" rel="tag">#android</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/06/27/EventBus消息类型重复解决方案/" rel="next" title="EventBus消息类型重复解决方案 ">
-                <i class="fa fa-chevron-left"></i> EventBus消息类型重复解决方案 
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/27/Android适配-dimen/" rel="prev" title="Android适配--dimen ">
-                Android适配--dimen  <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+    
+
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/2016/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2016/">1</a><span class="page-number current">2</span>
+  </nav>
+
+
 
 
           </div>
@@ -404,14 +275,6 @@ socketClient.connect();
 
 
           
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/06/27/AndroidSocketClient开源库的使用/"
-           data-title=" AndroidSocketClient开源库的使用 " data-url="http://yoursite.com/2016/06/27/AndroidSocketClient开源库的使用/">
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -431,17 +294,8 @@ socketClient.connect();
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/headimg.JPG"
@@ -534,17 +388,6 @@ socketClient.connect();
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -641,9 +484,11 @@ socketClient.connect();
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
+  
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
 
 
   

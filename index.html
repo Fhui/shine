@@ -152,7 +152,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle">no bug good life !</p>
+  <p class="site-subtitle"></p>
 </div>
 
 <div class="site-nav-toggle">
@@ -206,6 +206,109 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/04/ListView图片错乱解决方案/" itemprop="url">
+                  ListView图片错乱解决方案
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-04T18:04:44+08:00" content="2016-10-04">
+              2016-10-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/04/ListView图片错乱解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/ListView图片错乱解决方案/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>我们在平常开发Android中经常用到listview, 然而, 这个空间如果不进行优化的写法, 是非常吃内存的. 但是google在2013年IO大会上提出的viewholder写法显然已经是现在的优化标准了, 然而这个优化带来的烦恼也挺多的.<br>首先使用viewholder优化其实就是复用的创建好的item, 然后如果我们在创建好的item上面现实图片或者是在条目上做一些操作显然BUG是挺多的, 比如:我们listview显示的item里面是从网络获取的图片, 那么我们用viewholder优化后, 滑动listview图片会错乱, 会闪烁; 再比如, 我们常见的点赞操作, 我点击某一个条目, 它会给该条目设置一个标识, 然后当我在滑动的时候, 你会发现很奇怪, 怎么下面的item也会有该标识.<br><img src="http://img.blog.csdn.net/20160830185625962" alt="这里写图片描述"></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/10/04/ListView图片错乱解决方案/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -1136,109 +1239,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/27/EventBus消息类型重复解决方案/" itemprop="url">
-                  EventBus消息类型重复解决方案 
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-27T14:03:32+08:00" content="2016-06-27">
-              2016-06-27
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/27/EventBus消息类型重复解决方案/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/27/EventBus消息类型重复解决方案/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>我们平常在开发中各个组件进行数据交互也是常有的事，EventBus很好的解决了我们平常各组件数据交互时的代码量，但是我们在使用的时候会发现，如果每个页面发送的都是String类型的，在想接收的页面上接收也是String类型的，那么它会全部接收到，所以需要加一个判断，下面演示下解决方案吧，当然还有好多，另外还有很多类似于EventBus这种开源库，RXJava等等。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/06/27/EventBus消息类型重复解决方案/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1276,15 +1276,15 @@
       <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/headimg.JPG"
-               alt="HIMan" />
-          <p class="site-author-name" itemprop="name">HIMan</p>
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
           <p class="site-description motion-element" itemprop="description"></p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1385,7 +1385,7 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">HIMan</span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
 </div>
 
 <div class="powered-by">

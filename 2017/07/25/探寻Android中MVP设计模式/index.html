@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。此图是我从泡网上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="探寻Android中MVP设计模式">
+<meta property="og:url" content="http://shine666.club/2017/07/25/探寻Android中MVP设计模式/index.html">
+<meta property="og:site_name" content="FengHui">
+<meta property="og:description" content="Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。此图是我从泡网上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20160526115303276">
+<meta property="og:image" content="http://img.blog.csdn.net/20160526131655850">
+<meta property="og:image" content="http://img.blog.csdn.net/20160526132901604">
+<meta property="og:image" content="http://img.blog.csdn.net/20160526134308987">
+<meta property="og:image" content="http://img.blog.csdn.net/20160526135957650">
+<meta property="og:updated_time" content="2017-07-25T09:33:26.944Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="探寻Android中MVP设计模式">
+<meta name="twitter:description" content="Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。此图是我从泡网上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160526115303276">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shine666.club/2017/07/25/探寻Android中MVP设计模式/"/>
+
+
+
+
+
+  <title>探寻Android中MVP设计模式 | FengHui</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">FengHui</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/探寻Android中MVP设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">探寻Android中MVP设计模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:32:58+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。<br><img src="http://img.blog.csdn.net/20160526115303276" alt="这里写图片描述"><br>此图是我从<a href="http://www.jcodecraeer.com/" target="_blank" rel="external">泡网</a>上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。<br>MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的， 然而我们把一些逻辑写到controller中会使activitry或者fragment中代码巨多， 增加了代码的维护性，没准下一个开发者去维护代码是都要崩溃了<img src="http://img.blog.csdn.net/20160526131655850" alt="这里写图片描述"><br>下面我们进入今天的主题———-&gt;MVP<br>在MVP中， 每个字母都代表着什么？因为它是从MVC升级而来， 所以除了P其余都相同</p>
+<ul>
+<li>M:Module层， 也就是我们平常写的模型(JavaBean), 业务逻辑也是在这儿。</li>
+<li>V:View层， Activity， 自定义的View等等</li>
+<li>P:Presenter层，相当于中间人的角色，module去和view进行交互都是通过presenter</li>
+</ul>
+<p>这样mvp三层已经介绍完了，当然它的优缺点也有很多，我就不在这儿一一列举的， 我们今天主要是学如何使用mvp。当然， 我们要以代码的形式体现，这次的代码就是简单的点击按钮展示json数据， url和以前我讲volley的一样， 都是获取经纬度，返回json数据，而网络请求用的是volley。volley是google在2013年推出的网络请求框架，有不懂得同学可以去看我的另一篇<a href="http://blog.csdn.net/huiiiiiiii/article/details/51446511" target="_blank" rel="external">博客</a>.<br><img src="http://img.blog.csdn.net/20160526132901604" alt="这里写图片描述"><br>下面我们首先来展示的就是<strong>Module层</strong><br>在下手之前我们要思考一下我们展示数据都需要什么， 首先展示数据是一个动作，所以我们定义一个接口showData， 然后里面写一个方法load, 它需要什么参数呢？我们展示数据其实就是请求网络接口，然后把它给我们返回的数据展示出来。所以我们需要一个url和一个加载数据的监听(接口)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public interface ILoadListener &#123;</div><div class="line"></div><div class="line"></div><div class="line">    void loadSuccess(Data data);</div><div class="line">    void loadError();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public interface IShowData &#123;</div><div class="line"></div><div class="line">    Data load(String url, ILoadListener listener);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public class LoadData implements IShowData&#123;</div><div class="line"></div><div class="line">    private Data data;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Data load(String url, final ILoadListener listener) &#123;</div><div class="line"></div><div class="line"></div><div class="line">        HttpLoader.get(url, Data.class, 200, new ResponseListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onGetResponseSuccess(int requestCode, RBResponse response) &#123;</div><div class="line">                data = (Data) response;</div><div class="line">                listener.loadSuccess(data);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onGetResponseError(int requestCode, VolleyError error) &#123;</div><div class="line">                listener.loadError();</div><div class="line">            &#125;</div><div class="line">        &#125;, true);</div><div class="line"></div><div class="line">        return data;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上文已经说过， 我是用的是volley+gson封装，返回的就是一个javabean， 所以很是方便。我们从代码中可以看到在监听成功的接口中是有参数的，为什么呢？继续往下看<img src="http://img.blog.csdn.net/20160526134308987" alt="这里写图片描述"></p>
+<p>下面我们展示view层。<br>首先xml代码很是简单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">              android:layout_width=&quot;match_parent&quot;</div><div class="line">              android:layout_height=&quot;match_parent&quot;</div><div class="line">              android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:onClick=&quot;startLoad&quot;</div><div class="line">        android:text=&quot;load&quot;/&gt;</div><div class="line"></div><div class="line">    &lt;TextView</div><div class="line">        android:id=&quot;@+id/tv_show_load_data&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;match_parent&quot;</div><div class="line">        android:text=&quot;waiting for load data .&quot;/&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>在加载数据的时候需要设置url, 然后加载成功了会做什么，加载失败或做什么，所以我定义了接口中有三个方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public interface ILoadData &#123;</div><div class="line"></div><div class="line">    String getUrl();</div><div class="line">    void successFor(Data data);</div><div class="line">    void errorFor();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">public class LoadDataActivity extends AppCompatActivity implements ILoadData&#123;</div><div class="line"></div><div class="line">    private String url = &quot;http://gc.ditu.aliyun.com/geocoding?a=苏州市&quot;;</div><div class="line">    private TextView tv_show_load_data;</div><div class="line">    private LoadPresenter loadPresenter = new LoadPresenter(this);</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_load);</div><div class="line">        initView();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void initView()&#123;</div><div class="line">        tv_show_load_data = (TextView) findViewById(R.id.tv_show_load_data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void startLoad(View view)&#123;</div><div class="line">        loadPresenter.startLoad();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String getUrl() &#123;</div><div class="line">        return url;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void successFor(Data data) &#123;</div><div class="line">        tv_show_load_data.setText(data+&quot;&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void errorFor() &#123;</div><div class="line">        tv_show_load_data.setText(&quot;load error .&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后我们展示的是<strong>Prenenter</strong>层放出代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class LoadPresenter &#123;</div><div class="line"></div><div class="line">    private IShowData showData;</div><div class="line">    private ILoadData loadData;</div><div class="line"></div><div class="line">    public LoadPresenter(ILoadData loadData)&#123;</div><div class="line">        this.loadData = loadData;</div><div class="line">        showData = new LoadData();</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public void startLoad()&#123;</div><div class="line">        showData.load(loadData.getUrl(), new ILoadListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void loadSuccess(Data data) &#123;</div><div class="line">                loadData.successFor(data);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void loadError() &#123;</div><div class="line">                loadData.errorFor();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们创建了先前的两个接口的实例，然后再构造器中初始化， 然后写一个load方法来供module和view层进行数据交互。<br>到此为止， mvp版的展示数据就已经写完了，有的同学就说了，好麻烦啊， 仅仅是一个展示数据就写如此多的接口，<img src="http://img.blog.csdn.net/20160526135957650" alt="这里写图片描述"><br>对，兄弟，你说对了，就是比较麻烦，但是总比一个类上千行爽吧？这样层次分明，但是写起来要费一些时间，如果你有充分的时间和人力，并且提高代码的可维护性，mvp模式确实是挺好的选择，另外推荐下retrofit2+rxjava+mvp会让你一直高潮的，有兴趣的同学了解下吧。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/Android适配--dimen/" rel="next" title="Android适配--dimen">
+                <i class="fa fa-chevron-left"></i> Android适配--dimen
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/25/RXJava入门/" rel="prev" title="RXJava入门">
+                RXJava入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="FengHui" />
+          <p class="site-author-name" itemprop="name">FengHui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FengHui</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

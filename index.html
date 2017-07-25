@@ -254,6 +254,1004 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Android事件的分发(二) /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/Android事件的分发(二) /" itemprop="url">Android事件的分发(二)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:36:00+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这是Android事件分发讲解的第二篇， 在上篇我讲过View的事件分发，感兴趣的或者没有看过的可以再去<a href="http://blog.csdn.net/huiiiiiiii/article/details/51603720" target="_blank" rel="external"><strong>温习一遍</strong></a>。<br>一定要有不屈的精神， 哈哈。<br><img src="http://img.blog.csdn.net/20160613092042036" alt="这里写图片描述"><br>今天我们来搞下ViewGroup的事件分发，这个博主感觉要比View事件分发复杂一点点，但是也不难。</p>
+<p>#ViewGroup</p>
+<p>上篇博客我们在讲View的事件分发的时候讲过了， 当手指触摸屏幕的时候肯定会调用dispathTouchEvent方法，那么View和ViewGroup有什么区别？我简要的说下，我们所有能看得到的控件都是直接或间接的继承自View, 比如Button，TextView等等，太多了。那么ViewGroup是什么？说白了我们常用的布局都是继承自ViewGroup, LinearLayout, RelativeLayout， 那么，当我们用到写自定义控件的时候， 感觉会更强烈， 自定义View和自定义ViewGroup, 好， 那么我们先来看看ViewGroup是如何事件分发的？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;LinearLayout</div><div class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/btn_test&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:text=&quot;test_onTouch&quot;</div><div class="line">        android:layout_centerInParent=&quot;true&quot;/&gt;</div><div class="line"></div><div class="line">    &lt;com.customview.CustomViewGroup</div><div class="line">        android:id=&quot;@+id/custom_group&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;match_parent&quot;</div><div class="line">        android:clickable=&quot;true&quot;&gt;</div><div class="line">    &lt;/com.customview.CustomViewGroup&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>这是目前的布局， customViewGroup是一个自定义的LinearLayout, 间接继承了ViewGroup， 里面目前没有包含任何的View， 下面见代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class CustomViewGroup extends LinearLayout &#123;</div><div class="line">    public CustomViewGroup(Context context) &#123;</div><div class="line">        super(context);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public CustomViewGroup(Context context, AttributeSet attrs) &#123;</div><div class="line">        super(context, attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public CustomViewGroup(Context context, AttributeSet attrs, int defStyleAttr) &#123;</div><div class="line">        super(context, attrs, defStyleAttr);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends AppCompatActivity &#123;</div><div class="line"></div><div class="line">    private static final String TAG = &quot;ALOG&quot;;</div><div class="line">    @BindView(R.id.btn_test)</div><div class="line">    public Button btn_test;</div><div class="line">    @BindView(R.id.custom_group)</div><div class="line">    CustomViewGroup custom_group;</div><div class="line"></div><div class="line">   @Override</div><div class="line">   protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">       super.onCreate(savedInstanceState);</div><div class="line">       setContentView(R.layout.activity_main);</div><div class="line">       ButterKnife.bind(this);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">    @OnClick(&#123;R.id.btn_test,R.id.custom_group&#125;)</div><div class="line">    public void click(View v)&#123;</div><div class="line">        switch(v.getId())&#123;</div><div class="line">            case R.id.btn_test:</div><div class="line">                Log.i(TAG, &quot;Button:onclick&quot;);</div><div class="line">                break;</div><div class="line">            case R.id.custom_group:</div><div class="line">                Log.i(TAG, &quot;viewGroup:onclick&quot;);</div><div class="line">                break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @OnTouch(&#123;R.id.btn_test,R.id.custom_group&#125;)</div><div class="line">    public boolean touch(View v, MotionEvent event)&#123;</div><div class="line">        switch(v.getId())&#123;</div><div class="line">            case R.id.btn_test:</div><div class="line">                switch(event.getAction())&#123;</div><div class="line">                    case MotionEvent.ACTION_DOWN:</div><div class="line">                        Log.i(TAG, &quot;Button:ACTION_DOWN&quot;);</div><div class="line">                        break;</div><div class="line">                    case MotionEvent.ACTION_MOVE:</div><div class="line">                        Log.i(TAG, &quot;Button:ACTION_MOVE&quot;);</div><div class="line">                        break;</div><div class="line">                    case MotionEvent.ACTION_UP:</div><div class="line">                        Log.i(TAG, &quot;Button:ACTION_UP&quot;);</div><div class="line">                        break;</div><div class="line">                &#125;</div><div class="line">                return false;</div><div class="line">            case R.id.custom_group:</div><div class="line">                switch(event.getAction())&#123;</div><div class="line">                    case MotionEvent.ACTION_DOWN:</div><div class="line">                        Log.i(TAG, &quot;viewGroup:ACTION_DOWN&quot;);</div><div class="line">                        break;</div><div class="line">                    case MotionEvent.ACTION_MOVE:</div><div class="line">                        Log.i(TAG, &quot;viewGroup:ACTION_MOVE&quot;);</div><div class="line">                        break;</div><div class="line">                    case MotionEvent.ACTION_UP:</div><div class="line">                        Log.i(TAG, &quot;viewGroup:ACTION_UP&quot;);</div><div class="line">                        break;</div><div class="line">                &#125;</div><div class="line">                return false;</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我是这样响应的， 打印的log是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">06-13 10:26:57.450 22708-22708/ALOG: viewGroup:ACTION_DOWN</div><div class="line">06-13 10:26:57.550 22708-22708/ALOG: viewGroup:ACTION_UP</div><div class="line">06-13 10:26:57.550 22708-22708/ALOG: viewGroup:onclick</div><div class="line">06-13 10:26:59.830 22708-22708/ALOG: Button:ACTION_DOWN</div><div class="line">06-13 10:26:59.920 22708-22708/ALOG: Button:ACTION_UP</div><div class="line">06-13 10:26:59.920 22708-22708/ALOG: Button:onclick</div></pre></td></tr></table></figure>
+<p>和上次几乎一样，那么我们改一改，我们在customViewGroup中添加了一个button</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;com.iscs.mobilewcs.customview.CustomViewGroup</div><div class="line">       android:id=&quot;@+id/custom_group&quot;</div><div class="line">       android:layout_width=&quot;match_parent&quot;</div><div class="line">       android:layout_height=&quot;match_parent&quot;</div><div class="line">       android:clickable=&quot;true&quot;&gt;</div><div class="line"></div><div class="line">       &lt;Button</div><div class="line">           android:layout_width=&quot;match_parent&quot;</div><div class="line">           android:layout_height=&quot;wrap_content&quot;</div><div class="line">           android:id=&quot;@+id/btn_custom&quot;</div><div class="line">           android:text=&quot;btn_custom&quot;/&gt;</div><div class="line"></div><div class="line">   &lt;/com.iscs.mobilewcs.customview.CustomViewGroup&gt;</div></pre></td></tr></table></figure>
+<p>然后再来响应这个button的onclick和touch事件，customViewGroup中没有做任何改变。打印结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">06-13 11:04:52.710 23390-23390/ALOG: btn_custom:ACTION_DOWN</div><div class="line">06-13 11:04:52.800 23390-23390/ALOG: btn_custom:ACTION_UP</div><div class="line">06-13 11:04:52.830 23390-23390/ALOG: btn_custom:onclick</div></pre></td></tr></table></figure>
+<p>可以响应btn_custom的响应事件，但是缺少了customViewGroup的响应时间， 因为cunstomViewGroup是包含这个button，为什么没有响应呢？那么我们做一下改变，重写customViewGroup中的onInterceptTouchEvent方法，这个方法其实就是ViewGroup事件分发有很大关系，ViewGroup事件分发也就比View事件分发多了这么一个方法。也就是ViewGroup事件分发一共有三个方法，分别是:onTouchEvent，dispatchTouchEvent，onInterceptTouchEvent</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public boolean onInterceptTouchEvent(MotionEvent ev) &#123;</div><div class="line">        return super.onInterceptTouchEvent(ev);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>我们先来看看这个方法里面有什么，查看源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public boolean onInterceptTouchEvent(MotionEvent ev) &#123;</div><div class="line">     return false;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>哈哈，你没有看错，就一个返回值，这是做了什么？<br>我们看看文档怎么说的，我就用我渣渣的英语大改翻译一下<br><img src="http://img.blog.csdn.net/20160613112206016" alt="这里写图片描述"><br>For as long as you return false from this function, each following，event (up to and including the final up) will be delivered first here，and then to the target’s onTouchEvent()。<br>If you return true from here, you will not receive any following events: the target view will receive the same event but with the action {@link MotionEvent#ACTION_CANCEL}, and all further events will be delivered to your onTouchEvent() method and no longer appear here。<br>意思大概就是如果你返回false，事件会先传递到这儿，然后再到对应的onTouchEvent方法中，如果你返回true, 你将不会收到任何事件。<br>我就能看懂这么多，哎，回头赶紧去学英语。<br><img src="http://img.blog.csdn.net/20160613112930429" alt="这里写图片描述"><br>意思上面已经表达清楚了，这个方法是有多么关键，因为默认返回false，那么我们重写返回true试试看。Log如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">06-13 11:31:18.810 13751-13751/ALOG: custom_group:ACTION_DOWN</div><div class="line">06-13 11:31:18.870 13751-13751/ALOG: custom_group:ACTION_UP</div><div class="line">06-13 11:31:18.870 13751-13751/ALOG: viewGroup:onclick</div><div class="line">06-13 11:31:21.760 13751-13751/ALOG: custom_group:ACTION_DOWN</div><div class="line">06-13 11:31:21.810 13751-13751/ALOG: custom_group:ACTION_UP</div><div class="line">06-13 11:31:21.810 13751-13751/ALOG: viewGroup:onclick</div></pre></td></tr></table></figure>
+<p>我点击了一下btn_custom和custom_group但是Log上只打印custom_group，纳尼，为什么呢？<br>因为文档上已经写的很清楚了，当你返回true， 你将不会收到任何事件，我们来看看dispatchTouchEvent方法吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">if (disallowIntercept || !onInterceptTouchEvent(ev)) &#123;  </div><div class="line">          ev.setAction(MotionEvent.ACTION_DOWN);  </div><div class="line">          final int scrolledXInt = (int) scrolledXFloat;  </div><div class="line">          final int scrolledYInt = (int) scrolledYFloat;  </div><div class="line">          final View[] children = mChildren;  </div><div class="line">          final int count = mChildrenCount;  </div><div class="line">          for (int i = count - 1; i &gt;= 0; i--) &#123;  </div><div class="line">              final View child = children[i];  </div><div class="line">              if ((child.mViewFlags &amp; VISIBILITY_MASK) == VISIBLE  </div><div class="line">                      || child.getAnimation() != null) &#123;  </div><div class="line">                  child.getHitRect(frame);  </div><div class="line">                  if (frame.contains(scrolledXInt, scrolledYInt)) &#123;  </div><div class="line">                      final float xc = scrolledXFloat - child.mLeft;  </div><div class="line">                      final float yc = scrolledYFloat - child.mTop;  </div><div class="line">                      ev.setLocation(xc, yc);  </div><div class="line">                      child.mPrivateFlags &amp;= ~CANCEL_NEXT_UP_EVENT;  </div><div class="line">                      if (child.dispatchTouchEvent(ev))  &#123;  </div><div class="line">                          mMotionTarget = child;  </div><div class="line">                          return true;  </div><div class="line">                      &#125;  </div><div class="line">                  &#125;  </div><div class="line">              &#125;  </div><div class="line">          &#125;  </div><div class="line">      &#125;</div></pre></td></tr></table></figure>
+<p>在dispathTouchEvent中有这么一个判断，他判断的是disallowIntercept和!onInterceptTouchEvent的返回值判断符是||, 我们刚才onInterceptTouchEvent返回值是true， 然而判断是onInterceptTouchEvent取反， 而disallowIntercept的默认值是false，两个都是false这个判断就进不来了，直接消耗掉了。<br>我们在继续看源码，我们看到如果没有拦截，也就是返回false的时候，通过层层阻碍，到了这儿</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">for (int i = count - 1; i &gt;= 0; i--) &#123;  </div><div class="line">               final View child = children[i];  </div><div class="line">               if ((child.mViewFlags &amp; VISIBILITY_MASK) == VISIBLE  </div><div class="line">                       || child.getAnimation() != null) &#123;  </div><div class="line">                   child.getHitRect(frame);  </div><div class="line">                   if (frame.contains(scrolledXInt, scrolledYInt)) &#123;  </div><div class="line">                       final float xc = scrolledXFloat - child.mLeft;  </div><div class="line">                       final float yc = scrolledYFloat - child.mTop;  </div><div class="line">                       ev.setLocation(xc, yc);  </div><div class="line">                       child.mPrivateFlags &amp;= ~CANCEL_NEXT_UP_EVENT;  </div><div class="line">                       if (child.dispatchTouchEvent(ev))  &#123;  </div><div class="line">                           mMotionTarget = child;  </div><div class="line">                           return true;  </div><div class="line">                       &#125;  </div><div class="line">                   &#125;  </div><div class="line">               &#125;  </div><div class="line">           &#125;</div></pre></td></tr></table></figure>
+<p>上面代码判断viewgroup是否有子view，最后的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">if (child.dispatchTouchEvent(ev))  &#123;  </div><div class="line">                            mMotionTarget = child;  </div><div class="line">                            return true;  </div><div class="line">                        &#125;</div></pre></td></tr></table></figure>
+<p>如果有的话又调用的子View的dispathTouchEvent， 其实ViewGroup也是继承自View， 这样又转到了我们前几天写的第一篇View的事件分发。</p>
+<p>#总结<br>首先上一张总结图<br><img src="http://img.blog.csdn.net/20160613143320170" alt="这里写图片描述"><br>事件分发传递是先传到ViewGroup的，然后判断onInterceptTouchEvent的返回值，如果是false，继续向下传递，可以看成一个递归状态，但是如果是true，意味着拦截掉事件，然后响应dispathTouchEvent, 处理Touch事件。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Android事件的分发(一) /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/Android事件的分发(一) /" itemprop="url">Android事件的分发(一)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:35:20+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Android的事件分发是一个重点，同样也是一个难点，用到的地方非常的多，比如复杂的listview和srcoview嵌套， 带有侧拉功能的listView和viewPager相结合，listView下拉刷新和viewPager，很多个例子都是需要事件分发的，碰巧这个玩意又比较复杂，所以我们就来聊一聊Android的事件分发。</p>
+<p><img src="http://img.blog.csdn.net/20160607135247766" alt="这里写图片描述"></p>
+<p>#View的事件分发</p>
+<p>View事件的分发相对ViewGroup的分发来说还是比较简单的。我们先从View事件分发先来说起。上代码———-&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;RelativeLayout</div><div class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;&gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/btn_test&quot;</div><div class="line">        android:layout_width=&quot;wrap_content&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:text=&quot;test_onTouch&quot;</div><div class="line">        android:layout_centerInParent=&quot;true&quot;/&gt;</div><div class="line">&lt;/RelativeLayout&gt;</div></pre></td></tr></table></figure>
+<p>xml布局很简单，就有一个button, 我们再来看java代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnTouchListener&#123;</div><div class="line"></div><div class="line">    private static final String TAG = &quot;MainActivity&quot;;</div><div class="line">    private Button btn_test;</div><div class="line"></div><div class="line">   @Override</div><div class="line">   protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">       super.onCreate(savedInstanceState);</div><div class="line">       setContentView(R.layout.activity_main);</div><div class="line">       initView();</div><div class="line">   &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public void initView()&#123;</div><div class="line">        btn_test = (Button) findViewById(R.id.btn_test);</div><div class="line">        btn_test.setOnClickListener(this);</div><div class="line">        btn_test.setOnTouchListener(this);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onClick(View v) &#123;</div><div class="line">        Log.i(TAG, &quot;onclick:btn_test&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean onTouch(View v, MotionEvent event) &#123;</div><div class="line">        switch(event.getAction())&#123;</div><div class="line">            case MotionEvent.ACTION_DOWN:</div><div class="line">                Log.i(TAG, &quot;ACTION_DOWN&quot;);</div><div class="line">                break;</div><div class="line">            case MotionEvent.ACTION_MOVE:</div><div class="line">                Log.i(TAG, &quot;ACTION_MOVE&quot;);</div><div class="line">                break;</div><div class="line">            case MotionEvent.ACTION_UP:</div><div class="line">                Log.i(TAG, &quot;ACTION_UP&quot;);</div><div class="line">                break;</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我在点击事件上面和touch时间上面分别打上了tag，我们运行一下看看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">06-07 14:33:08.458 25345-25345/MainActivity: ACTION_DOWN</div><div class="line">06-07 14:33:08.528 25345-25345/MainActivity: ACTION_UP</div><div class="line">06-07 14:33:08.528 25345-25345/MainActivity: onclick:btn_test</div></pre></td></tr></table></figure>
+<p>运行结果是down, up, onclick。意料之中。<br><img src="http://img.blog.csdn.net/20160607144749656" alt="这里写图片描述"><br>我们再看看上面的onTouch方法，如果把返回值改成true会发生什么？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">06-07 14:51:06.638 25345-25345/MainActivity: ACTION_DOWN</div><div class="line">06-07 14:51:06.698 25345-25345/MainActivity: ACTION_UP</div></pre></td></tr></table></figure>
+<p>咦，好像少了一个LOG日志打印欸，What’s wrong? 这我们就得慢慢聊一聊onTouch这个方法。<br>我们注册touch事件调用了这个方法setOnTouchListener(), 正如所有的可见控件都继承了view， 所以我们去直接去它的祖先类中view找setrOnTouchListener(), 我们看下Android2.2的源码，因为高版本的代码太多了，更复杂 不容易理解，所以我选择android2.2的源码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> public void setOnTouchListener(OnTouchListener l) &#123;  </div><div class="line">    mOnTouchListener = l;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>找到了，和我们使用完全一样，传入一个OnTouchListener, 然后在内部赋值给mOnTouchListener， 其实mOnTouchListener是一个接口， 我们可以看到mOnTouchListener在dispathTouchEvent()方法中被调用到了， 我来说下这个dispathTouchEvent方法， 当我们触摸到手机上的控件的时候，会调用这个方法，dispatchTouchEvent()方法，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> public boolean dispatchTouchEvent(MotionEvent event) &#123;  </div><div class="line">    if (mOnTouchListener != null &amp;&amp; (mViewFlags &amp; ENABLED_MASK) == ENABLED &amp;&amp;  </div><div class="line">            mOnTouchListener.onTouch(this, event)) &#123;  </div><div class="line">        return true;  </div><div class="line">    &#125;  </div><div class="line">    return onTouchEvent(event);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们来观摩下mOnTouchListener里面的判断条件， mOnTouchListener！= null， 我们刚才看到mOntouchListener是什么东西了， 就是我们是否激活onTouchListener方法， 然后第二个条件(mViewFlags &amp; ENABLED_MASK) == ENABLED这个说白了就是空间是否是可用的，肯定是true， 最后这个条件mOnTouchListener.onTouch(this, event)， 是不是有点面熟， mOnTouchListener中的onTouch方法， 刚才有说过mOnTouchListener是个接口， 那么我们实现了这个方法的时候重写了该方法，关键就是它的返回值了，我们刚才测试， 如果返回值为true， 那么我们的onclick事件就不会响应了，这意味着该事件被消耗掉了。所以，当这三个条件都满足的时候返回true, 反之 调用onTouchEvent， 那么我们继续看看onTouchEvent方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line"> public boolean onTouchEvent(MotionEvent event) &#123;  </div><div class="line">    final int viewFlags = mViewFlags;  </div><div class="line">    if ((viewFlags &amp; ENABLED_MASK) == DISABLED) &#123;  </div><div class="line">        // A disabled view that is clickable still consumes the touch  </div><div class="line">        // events, it just doesn&apos;t respond to them.  </div><div class="line">        return (((viewFlags &amp; CLICKABLE) == CLICKABLE ||  </div><div class="line">                (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE));  </div><div class="line">    &#125;  </div><div class="line">    if (mTouchDelegate != null) &#123;  </div><div class="line">        if (mTouchDelegate.onTouchEvent(event)) &#123;  </div><div class="line">            return true;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">    if (((viewFlags &amp; CLICKABLE) == CLICKABLE ||  </div><div class="line">            (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE)) &#123;  </div><div class="line">        switch (event.getAction()) &#123;  </div><div class="line">            case MotionEvent.ACTION_UP:  </div><div class="line">                boolean prepressed = (mPrivateFlags &amp; PREPRESSED) != 0;  </div><div class="line">                if ((mPrivateFlags &amp; PRESSED) != 0 || prepressed) &#123;  </div><div class="line">                    // take focus if we don&apos;t have it already and we should in  </div><div class="line">                    // touch mode.  </div><div class="line">                    boolean focusTaken = false;  </div><div class="line">                    if (isFocusable() &amp;&amp; isFocusableInTouchMode() &amp;&amp; !isFocused()) &#123;  </div><div class="line">                        focusTaken = requestFocus();  </div><div class="line">                    &#125;  </div><div class="line">                    if (!mHasPerformedLongPress) &#123;  </div><div class="line">                        // This is a tap, so remove the longpress check  </div><div class="line">                        removeLongPressCallback();  </div><div class="line">                        // Only perform take click actions if we were in the pressed state  </div><div class="line">                        if (!focusTaken) &#123;  </div><div class="line">                            // Use a Runnable and post this rather than calling  </div><div class="line">                            // performClick directly. This lets other visual state  </div><div class="line">                            // of the view update before click actions start.  </div><div class="line">                            if (mPerformClick == null) &#123;  </div><div class="line">                                mPerformClick = new PerformClick();  </div><div class="line">                            &#125;  </div><div class="line">                            if (!post(mPerformClick)) &#123;  </div><div class="line">                                performClick();  </div><div class="line">                            &#125;  </div><div class="line">                        &#125;  </div><div class="line">                    &#125;  </div><div class="line">                    if (mUnsetPressedState == null) &#123;  </div><div class="line">                        mUnsetPressedState = new UnsetPressedState();  </div><div class="line">                    &#125;  </div><div class="line">                    if (prepressed) &#123;  </div><div class="line">                        mPrivateFlags |= PRESSED;  </div><div class="line">                        refreshDrawableState();  </div><div class="line">                        postDelayed(mUnsetPressedState,  </div><div class="line">                                ViewConfiguration.getPressedStateDuration());  </div><div class="line">                    &#125; else if (!post(mUnsetPressedState)) &#123;  </div><div class="line">                        // If the post failed, unpress right now  </div><div class="line">                        mUnsetPressedState.run();  </div><div class="line">                    &#125;  </div><div class="line">                    removeTapCallback();  </div><div class="line">                &#125;  </div><div class="line">                break;  </div><div class="line">            case MotionEvent.ACTION_DOWN:  </div><div class="line">                if (mPendingCheckForTap == null) &#123;  </div><div class="line">                    mPendingCheckForTap = new CheckForTap();  </div><div class="line">                &#125;  </div><div class="line">                mPrivateFlags |= PREPRESSED;  </div><div class="line">                mHasPerformedLongPress = false;  </div><div class="line">                postDelayed(mPendingCheckForTap, ViewConfiguration.getTapTimeout());  </div><div class="line">                break;  </div><div class="line">            case MotionEvent.ACTION_CANCEL:  </div><div class="line">                mPrivateFlags &amp;= ~PRESSED;  </div><div class="line">                refreshDrawableState();  </div><div class="line">                removeTapCallback();  </div><div class="line">                break;  </div><div class="line">            case MotionEvent.ACTION_MOVE:  </div><div class="line">                final int x = (int) event.getX();  </div><div class="line">                final int y = (int) event.getY();  </div><div class="line">                // Be lenient about moving outside of buttons  </div><div class="line">                int slop = mTouchSlop;  </div><div class="line">                if ((x &lt; 0 - slop) || (x &gt;= getWidth() + slop) ||  </div><div class="line">                        (y &lt; 0 - slop) || (y &gt;= getHeight() + slop)) &#123;  </div><div class="line">                    // Outside button  </div><div class="line">                    removeTapCallback();  </div><div class="line">                    if ((mPrivateFlags &amp; PRESSED) != 0) &#123;  </div><div class="line">                        // Remove any future long press/tap checks  </div><div class="line">                        removeLongPressCallback();  </div><div class="line">                        // Need to switch from pressed to not pressed  </div><div class="line">                        mPrivateFlags &amp;= ~PRESSED;  </div><div class="line">                        refreshDrawableState();  </div><div class="line">                    &#125;  </div><div class="line">                &#125;  </div><div class="line">                break;  </div><div class="line">        &#125;  </div><div class="line">        return true;  </div><div class="line">    &#125;  </div><div class="line">    return false;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看完刚才那个方法再看这个，是不是感觉突然代码量大多了，不过没关系，我们只需要看这个条件判断下的就好了<br><code>if (((viewFlags &amp; CLICKABLE) == CLICKABLE ||  
+            (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE))</code><br>判断成立后直接进入switch语句中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">switch (event.getAction()) &#123;  </div><div class="line">           case MotionEvent.ACTION_UP:  </div><div class="line">               boolean prepressed = (mPrivateFlags &amp; PREPRESSED) != 0;  </div><div class="line">               if ((mPrivateFlags &amp; PRESSED) != 0 || prepressed) &#123;  </div><div class="line">                   // take focus if we don&apos;t have it already and we should in  </div><div class="line">                   // touch mode.  </div><div class="line">                   boolean focusTaken = false;  </div><div class="line">                   if (isFocusable() &amp;&amp; isFocusableInTouchMode() &amp;&amp; !isFocused()) &#123;  </div><div class="line">                       focusTaken = requestFocus();  </div><div class="line">                   &#125;  </div><div class="line">                   if (!mHasPerformedLongPress) &#123;  </div><div class="line">                       // This is a tap, so remove the longpress check  </div><div class="line">                       removeLongPressCallback();  </div><div class="line">                       // Only perform take click actions if we were in the pressed state  </div><div class="line">                       if (!focusTaken) &#123;  </div><div class="line">                           // Use a Runnable and post this rather than calling  </div><div class="line">                           // performClick directly. This lets other visual state  </div><div class="line">                           // of the view update before click actions start.  </div><div class="line">                           if (mPerformClick == null) &#123;  </div><div class="line">                               mPerformClick = new PerformClick();  </div><div class="line">                           &#125;  </div><div class="line">                           if (!post(mPerformClick)) &#123;  </div><div class="line">                               performClick();  </div><div class="line">                           &#125;  </div><div class="line">                       &#125;  </div><div class="line">                   &#125;  </div><div class="line">                   if (mUnsetPressedState == null) &#123;  </div><div class="line">                       mUnsetPressedState = new UnsetPressedState();  </div><div class="line">                   &#125;  </div><div class="line">                   if (prepressed) &#123;  </div><div class="line">                       mPrivateFlags |= PRESSED;  </div><div class="line">                       refreshDrawableState();  </div><div class="line">                       postDelayed(mUnsetPressedState,  </div><div class="line">                               ViewConfiguration.getPressedStateDuration());  </div><div class="line">                   &#125; else if (!post(mUnsetPressedState)) &#123;  </div><div class="line">                       // If the post failed, unpress right now  </div><div class="line">                       mUnsetPressedState.run();  </div><div class="line">                   &#125;  </div><div class="line">                   removeTapCallback();  </div><div class="line">               &#125;  </div><div class="line">               break;  </div><div class="line">           case MotionEvent.ACTION_DOWN:  </div><div class="line">               if (mPendingCheckForTap == null) &#123;  </div><div class="line">                   mPendingCheckForTap = new CheckForTap();  </div><div class="line">               &#125;  </div><div class="line">               mPrivateFlags |= PREPRESSED;  </div><div class="line">               mHasPerformedLongPress = false;  </div><div class="line">               postDelayed(mPendingCheckForTap, ViewConfiguration.getTapTimeout());  </div><div class="line">               break;  </div><div class="line">           case MotionEvent.ACTION_CANCEL:  </div><div class="line">               mPrivateFlags &amp;= ~PRESSED;  </div><div class="line">               refreshDrawableState();  </div><div class="line">               removeTapCallback();  </div><div class="line">               break;  </div><div class="line">           case MotionEvent.ACTION_MOVE:  </div><div class="line">               final int x = (int) event.getX();  </div><div class="line">               final int y = (int) event.getY();  </div><div class="line">               // Be lenient about moving outside of buttons  </div><div class="line">               int slop = mTouchSlop;  </div><div class="line">               if ((x &lt; 0 - slop) || (x &gt;= getWidth() + slop) ||  </div><div class="line">                       (y &lt; 0 - slop) || (y &gt;= getHeight() + slop)) &#123;  </div><div class="line">                   // Outside button  </div><div class="line">                   removeTapCallback();  </div><div class="line">                   if ((mPrivateFlags &amp; PRESSED) != 0) &#123;  </div><div class="line">                       // Remove any future long press/tap checks  </div><div class="line">                       removeLongPressCallback();  </div><div class="line">                       // Need to switch from pressed to not pressed  </div><div class="line">                       mPrivateFlags &amp;= ~PRESSED;  </div><div class="line">                       refreshDrawableState();  </div><div class="line">                   &#125;  </div><div class="line">               &#125;</div></pre></td></tr></table></figure>
+<p>这里面有几个状态， 我们想一下刚才打印的log， 首先是down, 其次是up， 最后才是onclick， 那我们找一下up，<code>performClick();</code>  咦， 这是什么方法？好可疑，我们点进去看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> public boolean performClick() &#123;  </div><div class="line">    sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);  </div><div class="line">    if (mOnClickListener != null) &#123;  </div><div class="line">        playSoundEffect(SoundEffectConstants.CLICK);  </div><div class="line">        mOnClickListener.onClick(this);  </div><div class="line">        return true;  </div><div class="line">    &#125;  </div><div class="line">    return false;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有特么看到mOnclickListener了，阴魂不散啊， 这次判断就很简单了，只要mOnclickListner ！= null就会调用它的onClick方法，返回true。<br>看到这儿是不是瞬间脑动大开了，哈哈，把我累够呛。 最后在上一张流程图。<br><img src="http://img.blog.csdn.net/20160608111144447" alt="这里写图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/RXJava入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/RXJava入门/" itemprop="url">RXJava入门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:33:44+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>现在RXJava可谓是赤手可热，没接触过的同学见了RXJava风格代码会不会吐槽？“TMD这个是什么？和屎一样”哈哈，我初次见反正吐槽了，看不明白什么意思，但是经过了解以后看到了它的魅力，简直是代码中的宋仲基啊。帅的一逼。</p>
+<p><img src="http://img.blog.csdn.net/20160606133625762" alt="这里写图片描述"></p>
+<p>首先感谢抛物线大大谢了这么好的<a href="http://gank.io/post/560e15be2dca930e00da1083" target="_blank" rel="external"><strong>文章</strong></a>，供我们充分了解RXJava，原谅博主的愚笨看了好多遍,千万不要嘲笑朕，所以做一个笔记我们一起交流。<br>….</p>
+<p><img src="http://img.blog.csdn.net/20160606133312370" alt="这里写图片描述"></p>
+<p>博主总结的或许还是不是那么容易全, 但是起到一个交流的作用，见谅。<br>废话不多说，见正文。<br>老规矩—–&gt;GIT:<a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="external">https://github.com/ReactiveX/RxJava</a> ,<br>——————&gt;<a href="https://github.com/ReactiveX/RxAndroid" target="_blank" rel="external">https://github.com/ReactiveX/RxAndroid</a><br>使用只需要添加依赖就好:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">compile &apos;io.reactivex:rxjava:1.0.14&apos;</div><div class="line">compile &apos;io.reactivex:rxandroid:1.0.1&apos;</div></pre></td></tr></table></figure>
+<p>其实说白了RXJava就是异步的代名词， 在Android上面，好多操作都必须是异步的， 在Android的主线程中不允许有过多的耗时操作，否则系统抛出ANR异常，是的，你的程序被系统抛弃了。</p>
+<p>我们先来说说RXJava的关键API。</p>
+<p>Observable: 被观察者，Observer: 观察者， subscribe : 绑定观察<br>对，刚才忘了说了，其实这就是观察者模式，API也很直白，观察者，被观察者，订阅。一目了然。</p>
+<p>##创建Hello, world<br>我们在学编程的时候首先就会写最最最基础的helloworld， 那么我先给大家吧RXJava版的HelloWorld写出来，让大家过目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;String&gt;() &#123;</div><div class="line">           @Override</div><div class="line">           public void call(Subscriber&lt;? super String&gt; subscriber) &#123;</div><div class="line">               subscriber.onNext(&quot;hello, world.&quot;);</div><div class="line">               subscriber.onCompleted();</div><div class="line">           &#125;</div><div class="line">       &#125;).subscribe(new Observer&lt;String&gt;() &#123;</div><div class="line">           @Override</div><div class="line">           public void onCompleted() &#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line"></div><div class="line">           @Override</div><div class="line">           public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line"></div><div class="line">           @Override</div><div class="line">           public void onNext(String s) &#123;</div><div class="line">               Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">           &#125;</div><div class="line">       &#125;);</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20160606140523108" alt="这里写图片描述"><br>尼玛，我只不过输出依据hello,world竟然要这么多行，还让不让活了？<br>看官，且听我慢慢讲解。<br>上面代码就是举得最简单的例子，当然现实中写代码肯定不会这样的嘛，特么一个hello， world也要用rxjava写，除非你是RXJava骨灰粉丝，要不然你就是神经病，为了让大家容易快速掌握RXJava的使用用法，所以例子都会比较简单的。<br>代码很容易理解，创建一个Observable然后实现OnSubcribe中的call方法，这个方法中的参数是<br>Subscriber subscriber  那么subcriber是什么？<br>它是Observer中内置的抽象类罢了，但是重点来了，每个subcriber都会被转成Observer来使用的，所以他们都可以实现功能只不过subcriber比Observer多了几个方法而已，所以写代码的时候可以直接写subcriber.当Observable被订阅的时候 自动触发call()然后通过onNext()来触发，最后调用onCompleted(), 然后再observer中的onNext()方法来展示结果。<br>是不是特别简单？那么我们再来学习RXJava提供的另外几个更方便的API<br>Observable</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Observable.just(&quot;hello&quot;, &quot;world&quot;).subscribe(new Observer&lt;String&gt;() &#123;</div><div class="line">          @Override</div><div class="line">          public void onCompleted() &#123;</div><div class="line"></div><div class="line">          &#125;</div><div class="line"></div><div class="line">          @Override</div><div class="line">          public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">          &#125;</div><div class="line"></div><div class="line">          @Override</div><div class="line">          public void onNext(String s) &#123;</div><div class="line">              Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">          &#125;</div><div class="line">      &#125;);</div></pre></td></tr></table></figure>
+<p>前面突然出现了just(…)方法，其实Observable.just(“hello”, “world”)就是等同于subcriber.onNext(“hello”);subcriber.onNext(“world”);subcriber.onCompleted();是不是简化了许多？还有一种是操作数组的方法from()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">String[] strArray = &#123;&quot;hello&quot;, &quot;world&quot;&#125;;</div><div class="line">        Observable.from(strArray).subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void onCompleted() &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onNext(String s) &#123;</div><div class="line">                Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>操作起来都是一样的，非常的简单。好了，最基础的hello,world已经搞定了，下面我们继续搞一下filter， map， flatMap.</p>
+<p>##flter, map, flatMap</p>
+<p>首先我们来看看flter方法。flter翻译过来的意思是滤过，其实它在rxjava中的含义也差不多，过滤嘛。我们来写个Demo玩玩。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">String[] params = &#123;&quot;android&quot;, &quot;ios&quot;, &quot;java&quot;, &quot;c&quot;, &quot;c++&quot;&#125;;</div><div class="line">        Observable.from(params)</div><div class="line">                .filter(new Func1&lt;String, Boolean&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public Boolean call(String s) &#123;</div><div class="line">                        return s.length() &gt; 3;</div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line">                .subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public void onCompleted() &#123;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onNext(String s) &#123;</div><div class="line">                        Log.i(TAG, &quot;onNext:&quot; + s);</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div></pre></td></tr></table></figure>
+<p>运行结果—–&gt;<br><code>06-06 15:34:38.468 10201-10201/ALOG: onNext:android
+06-06 15:34:38.468 10201-10201/ALOG: onNext:java</code></p>
+<p>上面代码就是过滤params数组中字符串长度小于3的参数，然后再onNext方法中打印出来, 使用filter过滤是不是挺爽的。<br>下面我们看看map， map可以起到变换的作用，超吊的哦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">Observable.just(1, 2, 3, 4, 5)</div><div class="line">              .filter(new Func1&lt;Integer, Boolean&gt;() &#123;</div><div class="line">                  @Override</div><div class="line">                  public Boolean call(Integer integer) &#123;</div><div class="line">                      return integer &gt; 3;</div><div class="line">                  &#125;</div><div class="line">              &#125;)</div><div class="line">              .map(new Func1&lt;Integer, String&gt;() &#123;</div><div class="line">                  @Override</div><div class="line">                  public String call(Integer integer) &#123;</div><div class="line">                      return integer+&quot;rxJava&quot;;</div><div class="line">                  &#125;</div><div class="line">              &#125;)</div><div class="line">              .subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">                  @Override</div><div class="line">                  public void onCompleted() &#123;</div><div class="line"></div><div class="line">                  &#125;</div><div class="line"></div><div class="line">                  @Override</div><div class="line">                  public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">                  &#125;</div><div class="line"></div><div class="line">                  @Override</div><div class="line">                  public void onNext(String s) &#123;</div><div class="line">                      Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">                  &#125;</div><div class="line">              &#125;);</div></pre></td></tr></table></figure>
+<p>打印的结果是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">06-06 15:50:11.688 23667-23667/ALOG: onNext:4rxJava</div><div class="line">06-06 15:50:11.688 23667-23667/ALOG: onNext:5rxJava</div></pre></td></tr></table></figure>
+<p>从代码可以看出，首先just进去五个数字，然后通过filter过滤大于3的，然后再通过map把过滤后的添加字符串’rxjava’，在onNext方法打印输出.是不是map也是非常简单的，感觉到rxjava的强大了吧。我们再来看看flateMap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;Person&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void call(Subscriber&lt;? super Person&gt; subscriber) &#123;</div><div class="line">             subscriber.onNext(Person.createPerson());</div><div class="line">        &#125;</div><div class="line">    &#125;).flatMap(new Func1&lt;Person, Observable&lt;Person.PersonProperty&gt;&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public Observable&lt;Person.PersonProperty&gt; call(final Person person) &#123;</div><div class="line">            return Observable.create(new Observable.OnSubscribe&lt;Person.PersonProperty&gt;() &#123;</div><div class="line">                @Override</div><div class="line">                public void call(Subscriber&lt;? super Person.PersonProperty&gt; subscriber) &#123;</div><div class="line">                    for(int i = 0;i &lt; person.getList().size(); i++)&#123;</div><div class="line">                        subscriber.onNext(person.getList().get(i));</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;).subscribe(new Subscriber&lt;Person.PersonProperty&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void onCompleted() &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onNext(Person.PersonProperty personProperty) &#123;</div><div class="line">            Log.i(TAG, &quot;onNext:&quot;+personProperty);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=100, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=101, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=102, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=103, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=104, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=105, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=106, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=107, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=108, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=109, name=&apos;张三&apos;&#125;</div></pre></td></tr></table></figure>
+<p>其实我就是创建了一个javaBean， 然后打印姓名以及和这个人的属性， flatMap变换比较难理解，其实就是返回的是一个Obsverable对象，当创建一个Obsverable的时候，他会将里面的参数全部读取出来，然后统一发给Subcribe去打印，其实在上面的代码中我为了大家更容易理解我没有写Obsverable.from，而是利用for循环打印，这样更好理解，更容易看清变换的过程。</p>
+<p>##线程控制Scheduler </p>
+<p>Schedulers.immediate(): 直接在当前线程运行，默认。<br>Schedulers.newThread(): 创建一个线程在新线程执行操作。<br>Schedulers.io(): 其实就是里面含有一个无数量上限的线程池，可以重用空闲的线程。<br>Schedulers.computation(): 一般进行复杂计算所使用的线程。AndroidSchedulers.mainThread():在主线程中运行。</p>
+<p>##结束语<br>也是谢了不少内容，RXJava的基本内容反正是在这儿了，还有很多没有列举出来，大家可以多实践， 我们多多交流。</p>
+<p>#<strong>共勉</strong>。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/探寻Android中MVP设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/探寻Android中MVP设计模式/" itemprop="url">探寻Android中MVP设计模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:32:58+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。<br><img src="http://img.blog.csdn.net/20160526115303276" alt="这里写图片描述"><br>此图是我从<a href="http://www.jcodecraeer.com/" target="_blank" rel="external">泡网</a>上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。<br>MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的， 然而我们把一些逻辑写到controller中会使activitry或者fragment中代码巨多， 增加了代码的维护性，没准下一个开发者去维护代码是都要崩溃了<img src="http://img.blog.csdn.net/20160526131655850" alt="这里写图片描述"><br>下面我们进入今天的主题———-&gt;MVP<br>在MVP中， 每个字母都代表着什么？因为它是从MVC升级而来， 所以除了P其余都相同</p>
+<ul>
+<li>M:Module层， 也就是我们平常写的模型(JavaBean), 业务逻辑也是在这儿。</li>
+<li>V:View层， Activity， 自定义的View等等</li>
+<li>P:Presenter层，相当于中间人的角色，module去和view进行交互都是通过presenter</li>
+</ul>
+<p>这样mvp三层已经介绍完了，当然它的优缺点也有很多，我就不在这儿一一列举的， 我们今天主要是学如何使用mvp。当然， 我们要以代码的形式体现，这次的代码就是简单的点击按钮展示json数据， url和以前我讲volley的一样， 都是获取经纬度，返回json数据，而网络请求用的是volley。volley是google在2013年推出的网络请求框架，有不懂得同学可以去看我的另一篇<a href="http://blog.csdn.net/huiiiiiiii/article/details/51446511" target="_blank" rel="external">博客</a>.<br><img src="http://img.blog.csdn.net/20160526132901604" alt="这里写图片描述"><br>下面我们首先来展示的就是<strong>Module层</strong><br>在下手之前我们要思考一下我们展示数据都需要什么， 首先展示数据是一个动作，所以我们定义一个接口showData， 然后里面写一个方法load, 它需要什么参数呢？我们展示数据其实就是请求网络接口，然后把它给我们返回的数据展示出来。所以我们需要一个url和一个加载数据的监听(接口)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public interface ILoadListener &#123;</div><div class="line"></div><div class="line"></div><div class="line">    void loadSuccess(Data data);</div><div class="line">    void loadError();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public interface IShowData &#123;</div><div class="line"></div><div class="line">    Data load(String url, ILoadListener listener);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public class LoadData implements IShowData&#123;</div><div class="line"></div><div class="line">    private Data data;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Data load(String url, final ILoadListener listener) &#123;</div><div class="line"></div><div class="line"></div><div class="line">        HttpLoader.get(url, Data.class, 200, new ResponseListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onGetResponseSuccess(int requestCode, RBResponse response) &#123;</div><div class="line">                data = (Data) response;</div><div class="line">                listener.loadSuccess(data);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onGetResponseError(int requestCode, VolleyError error) &#123;</div><div class="line">                listener.loadError();</div><div class="line">            &#125;</div><div class="line">        &#125;, true);</div><div class="line"></div><div class="line">        return data;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上文已经说过， 我是用的是volley+gson封装，返回的就是一个javabean， 所以很是方便。我们从代码中可以看到在监听成功的接口中是有参数的，为什么呢？继续往下看<img src="http://img.blog.csdn.net/20160526134308987" alt="这里写图片描述"></p>
+<p>下面我们展示view层。<br>首先xml代码很是简单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">              android:layout_width=&quot;match_parent&quot;</div><div class="line">              android:layout_height=&quot;match_parent&quot;</div><div class="line">              android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:onClick=&quot;startLoad&quot;</div><div class="line">        android:text=&quot;load&quot;/&gt;</div><div class="line"></div><div class="line">    &lt;TextView</div><div class="line">        android:id=&quot;@+id/tv_show_load_data&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;match_parent&quot;</div><div class="line">        android:text=&quot;waiting for load data .&quot;/&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>在加载数据的时候需要设置url, 然后加载成功了会做什么，加载失败或做什么，所以我定义了接口中有三个方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public interface ILoadData &#123;</div><div class="line"></div><div class="line">    String getUrl();</div><div class="line">    void successFor(Data data);</div><div class="line">    void errorFor();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">public class LoadDataActivity extends AppCompatActivity implements ILoadData&#123;</div><div class="line"></div><div class="line">    private String url = &quot;http://gc.ditu.aliyun.com/geocoding?a=苏州市&quot;;</div><div class="line">    private TextView tv_show_load_data;</div><div class="line">    private LoadPresenter loadPresenter = new LoadPresenter(this);</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_load);</div><div class="line">        initView();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void initView()&#123;</div><div class="line">        tv_show_load_data = (TextView) findViewById(R.id.tv_show_load_data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void startLoad(View view)&#123;</div><div class="line">        loadPresenter.startLoad();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String getUrl() &#123;</div><div class="line">        return url;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void successFor(Data data) &#123;</div><div class="line">        tv_show_load_data.setText(data+&quot;&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void errorFor() &#123;</div><div class="line">        tv_show_load_data.setText(&quot;load error .&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后我们展示的是<strong>Prenenter</strong>层放出代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class LoadPresenter &#123;</div><div class="line"></div><div class="line">    private IShowData showData;</div><div class="line">    private ILoadData loadData;</div><div class="line"></div><div class="line">    public LoadPresenter(ILoadData loadData)&#123;</div><div class="line">        this.loadData = loadData;</div><div class="line">        showData = new LoadData();</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public void startLoad()&#123;</div><div class="line">        showData.load(loadData.getUrl(), new ILoadListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void loadSuccess(Data data) &#123;</div><div class="line">                loadData.successFor(data);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void loadError() &#123;</div><div class="line">                loadData.errorFor();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们创建了先前的两个接口的实例，然后再构造器中初始化， 然后写一个load方法来供module和view层进行数据交互。<br>到此为止， mvp版的展示数据就已经写完了，有的同学就说了，好麻烦啊， 仅仅是一个展示数据就写如此多的接口，<img src="http://img.blog.csdn.net/20160526135957650" alt="这里写图片描述"><br>对，兄弟，你说对了，就是比较麻烦，但是总比一个类上千行爽吧？这样层次分明，但是写起来要费一些时间，如果你有充分的时间和人力，并且提高代码的可维护性，mvp模式确实是挺好的选择，另外推荐下retrofit2+rxjava+mvp会让你一直高潮的，有兴趣的同学了解下吧。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Android适配--dimen/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/Android适配--dimen/" itemprop="url">Android适配--dimen</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:29:50+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈<img src="http://img.blog.csdn.net/20160519111525096" alt="这里写图片描述"></p>
+<p>我给大家推荐一个socketclient库，用起来特别方便，主要是源于前几天公司需要长连接，正好逛GitHub的时候发现的这个库，挺爽挺方便的，推荐给大家。</p>
+<p>git:<a href="https://github.com/vilyever/AndroidSocketClient" target="_blank" rel="external">https://github.com/vilyever/AndroidSocketClient</a></p>
+<p>下载完导入，然后再gradle中添加        </p>
+<pre><code>                repositories {
+              maven { url &quot;https://jitpack.io&quot; }
+              }
+              dependencies {
+  compile &apos;com.github.vilyever:AndroidSocketClient:1.4.1&apos;
+}
+</code></pre><p>至于用法也是非常简单</p>
+<pre><code>private SocketClient socketClient;
+</code></pre><p>创建scoketClient.</p>
+<pre><code>socketClient = new SocketClient(url, prot);
+</code></pre><p>里面传入socketClient的url地址和端口号。<br>                socketClient.registerSocketDelegate(new SocketClient.SocketDelegate(){</p>
+<pre><code>    @Override
+    public void onConnected(SocketClient client) {
+        socketClient.send(&quot;hello, server !---------------------------&gt;Android&quot;);
+        socketClient.setHeartBeatMessage(&quot;hello, server !---------------------------&gt;Android&quot;);
+    }
+
+    @Override
+    public void onDisconnected(SocketClient client) {
+        Log.i(&quot;Server&quot;, &quot;timeout&quot;);
+        String error = client.getCharsetName();
+        Log.i(&quot;Server&quot;, &quot;timeoutData:&quot;+error);
+
+    }
+
+    @Override
+    public void onResponse(SocketClient client, @NonNull SocketResponsePacket responsePacket) {
+        String responseMsg = responsePacket.getMessage();
+        int i = 1;
+        Log.i(&quot;Server&quot;, responseMsg);
+    }
+});
+</code></pre><p>这个方法直接实现了socket发送信息到服务器，在onDisconnected()错误信息也可以及时返回并打印。</p>
+<pre><code>socketClient.setConnectionTimeout(1000 * 15);
+socketClient.setHeartBeatInterval(1000);
+socketClient.setRemoteNoReplyAliveTimeout(1000 * 60);
+socketClient.setCharsetName(&quot;UTF-8&quot;);
+socketClient.connect();
+</code></pre><p>这边设置的是超时时间，心跳包的间隔， 自动连接时间，编码格式。<br>是不是用起来特别爽？<br>因为库也是国人写的，注释都是中文，大家可以扒一扒源代码看如何实现， 毕竟学东西不只是学如何使用，还要追求原理的。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/AndroidSocketClient开源库的使用 /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/AndroidSocketClient开源库的使用 /" itemprop="url">AndroidSocketClient开源库的使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:28:11+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈<img src="http://img.blog.csdn.net/20160519111525096" alt="这里写图片描述"></p>
+<p>我给大家推荐一个socketclient库，用起来特别方便，主要是源于前几天公司需要长连接，正好逛GitHub的时候发现的这个库，挺爽挺方便的，推荐给大家。</p>
+<p>git:<a href="https://github.com/vilyever/AndroidSocketClient" target="_blank" rel="external">https://github.com/vilyever/AndroidSocketClient</a></p>
+<p>下载完导入，然后再gradle中添加        </p>
+<pre><code>                repositories {
+              maven { url &quot;https://jitpack.io&quot; }
+              }
+              dependencies {
+  compile &apos;com.github.vilyever:AndroidSocketClient:1.4.1&apos;
+}
+</code></pre><p>至于用法也是非常简单</p>
+<pre><code>private SocketClient socketClient;
+</code></pre><p>创建scoketClient.</p>
+<pre><code>socketClient = new SocketClient(url, prot);
+</code></pre><p>里面传入socketClient的url地址和端口号。<br>                socketClient.registerSocketDelegate(new SocketClient.SocketDelegate(){</p>
+<pre><code>    @Override
+    public void onConnected(SocketClient client) {
+        socketClient.send(&quot;hello, server !---------------------------&gt;Android&quot;);
+        socketClient.setHeartBeatMessage(&quot;hello, server !---------------------------&gt;Android&quot;);
+    }
+
+    @Override
+    public void onDisconnected(SocketClient client) {
+        Log.i(&quot;Server&quot;, &quot;timeout&quot;);
+        String error = client.getCharsetName();
+        Log.i(&quot;Server&quot;, &quot;timeoutData:&quot;+error);
+
+    }
+
+    @Override
+    public void onResponse(SocketClient client, @NonNull SocketResponsePacket responsePacket) {
+        String responseMsg = responsePacket.getMessage();
+        int i = 1;
+        Log.i(&quot;Server&quot;, responseMsg);
+    }
+});
+</code></pre><p>这个方法直接实现了socket发送信息到服务器，在onDisconnected()错误信息也可以及时返回并打印。</p>
+<pre><code>socketClient.setConnectionTimeout(1000 * 15);
+socketClient.setHeartBeatInterval(1000);
+socketClient.setRemoteNoReplyAliveTimeout(1000 * 60);
+socketClient.setCharsetName(&quot;UTF-8&quot;);
+socketClient.connect();
+</code></pre><p>这边设置的是超时时间，心跳包的间隔， 自动连接时间，编码格式。<br>是不是用起来特别爽？<br>因为库也是国人写的，注释都是中文，大家可以扒一扒源代码看如何实现， 毕竟学东西不只是学如何使用，还要追求原理的。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/EventBus消息类型重复解决方案 /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/EventBus消息类型重复解决方案 /" itemprop="url">EventBus消息类型重复解决方案</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:26:52+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们平常在开发中各个组件进行数据交互也是常有的事，EventBus很好的解决了我们平常各组件数据交互时的代码量，但是我们在使用的时候会发现，如果每个页面发送的都是String类型的，在想接收的页面上接收也是String类型的，那么它会全部接收到，所以需要加一个判断，下面演示下解决方案吧，当然还有好多，另外还有很多类似于EventBus这种开源库，RXJava等等。</p>
+<p>EventBus在V1.0.4的时候发布粘性事件，可以发送对象，但是需要手动注销掉。所以我们借助这个粘性事件来搞起。</p>
+<p>我们首先创建一个Event类来存储信息 </p>
+<pre><code>public T data;
+public Message msg;
+public static enum Message{
+    test;
+}
+
+public AppEvent(){
+
+}
+
+public AppEvent(Message msg, T data){
+    this.msg = msg;
+    this.data = data;
+}
+
+public Message getMessage() {
+    return msg;
+}
+
+public &lt;T&gt;T getData(){
+    if(data == null){
+
+    }
+    return (T)data;
+}
+
+public static &lt;T&gt; void post(Message msg, T data){
+    EventBus.getDefault().postSticky(new AppEvent(msg, data));
+}
+</code></pre><p>我们放入一个枚举类， 里面存储一些信息，然后我们发送的时候直接发送该类的post方法，然后接收onEvent(Appevent event), 然后通过message来switch判断，简单方便便捷。<br>说白了就是加个判断呗。简单记录下。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Volley以及自定义Request详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -593,7 +1591,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

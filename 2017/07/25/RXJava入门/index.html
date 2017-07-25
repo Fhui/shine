@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="现在RXJava可谓是赤手可热，没接触过的同学见了RXJava风格代码会不会吐槽？“TMD这个是什么？和屎一样”哈哈，我初次见反正吐槽了，看不明白什么意思，但是经过了解以后看到了它的魅力，简直是代码中的宋仲基啊。帅的一逼。  首先感谢抛物线大大谢了这么好的文章，供我们充分了解RXJava，原谅博主的愚笨看了好多遍,千万不要嘲笑朕，所以做一个笔记我们一起交流。….  博主总结的或许还是不是那么容易全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RXJava入门">
+<meta property="og:url" content="http://shine666.club/2017/07/25/RXJava入门/index.html">
+<meta property="og:site_name" content="FengHui">
+<meta property="og:description" content="现在RXJava可谓是赤手可热，没接触过的同学见了RXJava风格代码会不会吐槽？“TMD这个是什么？和屎一样”哈哈，我初次见反正吐槽了，看不明白什么意思，但是经过了解以后看到了它的魅力，简直是代码中的宋仲基啊。帅的一逼。  首先感谢抛物线大大谢了这么好的文章，供我们充分了解RXJava，原谅博主的愚笨看了好多遍,千万不要嘲笑朕，所以做一个笔记我们一起交流。….  博主总结的或许还是不是那么容易全">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20160606133625762">
+<meta property="og:image" content="http://img.blog.csdn.net/20160606133312370">
+<meta property="og:image" content="http://img.blog.csdn.net/20160606140523108">
+<meta property="og:updated_time" content="2017-07-25T09:34:33.956Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RXJava入门">
+<meta name="twitter:description" content="现在RXJava可谓是赤手可热，没接触过的同学见了RXJava风格代码会不会吐槽？“TMD这个是什么？和屎一样”哈哈，我初次见反正吐槽了，看不明白什么意思，但是经过了解以后看到了它的魅力，简直是代码中的宋仲基啊。帅的一逼。  首先感谢抛物线大大谢了这么好的文章，供我们充分了解RXJava，原谅博主的愚笨看了好多遍,千万不要嘲笑朕，所以做一个笔记我们一起交流。….  博主总结的或许还是不是那么容易全">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160606133625762">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shine666.club/2017/07/25/RXJava入门/"/>
+
+
+
+
+
+  <title>RXJava入门 | FengHui</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">FengHui</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/RXJava入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RXJava入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:33:44+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现在RXJava可谓是赤手可热，没接触过的同学见了RXJava风格代码会不会吐槽？“TMD这个是什么？和屎一样”哈哈，我初次见反正吐槽了，看不明白什么意思，但是经过了解以后看到了它的魅力，简直是代码中的宋仲基啊。帅的一逼。</p>
+<p><img src="http://img.blog.csdn.net/20160606133625762" alt="这里写图片描述"></p>
+<p>首先感谢抛物线大大谢了这么好的<a href="http://gank.io/post/560e15be2dca930e00da1083" target="_blank" rel="external"><strong>文章</strong></a>，供我们充分了解RXJava，原谅博主的愚笨看了好多遍,千万不要嘲笑朕，所以做一个笔记我们一起交流。<br>….</p>
+<p><img src="http://img.blog.csdn.net/20160606133312370" alt="这里写图片描述"></p>
+<p>博主总结的或许还是不是那么容易全, 但是起到一个交流的作用，见谅。<br>废话不多说，见正文。<br>老规矩—–&gt;GIT:<a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="external">https://github.com/ReactiveX/RxJava</a> ,<br>——————&gt;<a href="https://github.com/ReactiveX/RxAndroid" target="_blank" rel="external">https://github.com/ReactiveX/RxAndroid</a><br>使用只需要添加依赖就好:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">compile &apos;io.reactivex:rxjava:1.0.14&apos;</div><div class="line">compile &apos;io.reactivex:rxandroid:1.0.1&apos;</div></pre></td></tr></table></figure>
+<p>其实说白了RXJava就是异步的代名词， 在Android上面，好多操作都必须是异步的， 在Android的主线程中不允许有过多的耗时操作，否则系统抛出ANR异常，是的，你的程序被系统抛弃了。</p>
+<p>我们先来说说RXJava的关键API。</p>
+<p>Observable: 被观察者，Observer: 观察者， subscribe : 绑定观察<br>对，刚才忘了说了，其实这就是观察者模式，API也很直白，观察者，被观察者，订阅。一目了然。</p>
+<p>##创建Hello, world<br>我们在学编程的时候首先就会写最最最基础的helloworld， 那么我先给大家吧RXJava版的HelloWorld写出来，让大家过目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;String&gt;() &#123;</div><div class="line">           @Override</div><div class="line">           public void call(Subscriber&lt;? super String&gt; subscriber) &#123;</div><div class="line">               subscriber.onNext(&quot;hello, world.&quot;);</div><div class="line">               subscriber.onCompleted();</div><div class="line">           &#125;</div><div class="line">       &#125;).subscribe(new Observer&lt;String&gt;() &#123;</div><div class="line">           @Override</div><div class="line">           public void onCompleted() &#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line"></div><div class="line">           @Override</div><div class="line">           public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line"></div><div class="line">           @Override</div><div class="line">           public void onNext(String s) &#123;</div><div class="line">               Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">           &#125;</div><div class="line">       &#125;);</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20160606140523108" alt="这里写图片描述"><br>尼玛，我只不过输出依据hello,world竟然要这么多行，还让不让活了？<br>看官，且听我慢慢讲解。<br>上面代码就是举得最简单的例子，当然现实中写代码肯定不会这样的嘛，特么一个hello， world也要用rxjava写，除非你是RXJava骨灰粉丝，要不然你就是神经病，为了让大家容易快速掌握RXJava的使用用法，所以例子都会比较简单的。<br>代码很容易理解，创建一个Observable然后实现OnSubcribe中的call方法，这个方法中的参数是<br>Subscriber subscriber  那么subcriber是什么？<br>它是Observer中内置的抽象类罢了，但是重点来了，每个subcriber都会被转成Observer来使用的，所以他们都可以实现功能只不过subcriber比Observer多了几个方法而已，所以写代码的时候可以直接写subcriber.当Observable被订阅的时候 自动触发call()然后通过onNext()来触发，最后调用onCompleted(), 然后再observer中的onNext()方法来展示结果。<br>是不是特别简单？那么我们再来学习RXJava提供的另外几个更方便的API<br>Observable</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Observable.just(&quot;hello&quot;, &quot;world&quot;).subscribe(new Observer&lt;String&gt;() &#123;</div><div class="line">          @Override</div><div class="line">          public void onCompleted() &#123;</div><div class="line"></div><div class="line">          &#125;</div><div class="line"></div><div class="line">          @Override</div><div class="line">          public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">          &#125;</div><div class="line"></div><div class="line">          @Override</div><div class="line">          public void onNext(String s) &#123;</div><div class="line">              Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">          &#125;</div><div class="line">      &#125;);</div></pre></td></tr></table></figure>
+<p>前面突然出现了just(…)方法，其实Observable.just(“hello”, “world”)就是等同于subcriber.onNext(“hello”);subcriber.onNext(“world”);subcriber.onCompleted();是不是简化了许多？还有一种是操作数组的方法from()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">String[] strArray = &#123;&quot;hello&quot;, &quot;world&quot;&#125;;</div><div class="line">        Observable.from(strArray).subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void onCompleted() &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onNext(String s) &#123;</div><div class="line">                Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>操作起来都是一样的，非常的简单。好了，最基础的hello,world已经搞定了，下面我们继续搞一下filter， map， flatMap.</p>
+<p>##flter, map, flatMap</p>
+<p>首先我们来看看flter方法。flter翻译过来的意思是滤过，其实它在rxjava中的含义也差不多，过滤嘛。我们来写个Demo玩玩。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">String[] params = &#123;&quot;android&quot;, &quot;ios&quot;, &quot;java&quot;, &quot;c&quot;, &quot;c++&quot;&#125;;</div><div class="line">        Observable.from(params)</div><div class="line">                .filter(new Func1&lt;String, Boolean&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public Boolean call(String s) &#123;</div><div class="line">                        return s.length() &gt; 3;</div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line">                .subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public void onCompleted() &#123;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onNext(String s) &#123;</div><div class="line">                        Log.i(TAG, &quot;onNext:&quot; + s);</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div></pre></td></tr></table></figure>
+<p>运行结果—–&gt;<br><code>06-06 15:34:38.468 10201-10201/ALOG: onNext:android
+06-06 15:34:38.468 10201-10201/ALOG: onNext:java</code></p>
+<p>上面代码就是过滤params数组中字符串长度小于3的参数，然后再onNext方法中打印出来, 使用filter过滤是不是挺爽的。<br>下面我们看看map， map可以起到变换的作用，超吊的哦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">Observable.just(1, 2, 3, 4, 5)</div><div class="line">              .filter(new Func1&lt;Integer, Boolean&gt;() &#123;</div><div class="line">                  @Override</div><div class="line">                  public Boolean call(Integer integer) &#123;</div><div class="line">                      return integer &gt; 3;</div><div class="line">                  &#125;</div><div class="line">              &#125;)</div><div class="line">              .map(new Func1&lt;Integer, String&gt;() &#123;</div><div class="line">                  @Override</div><div class="line">                  public String call(Integer integer) &#123;</div><div class="line">                      return integer+&quot;rxJava&quot;;</div><div class="line">                  &#125;</div><div class="line">              &#125;)</div><div class="line">              .subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">                  @Override</div><div class="line">                  public void onCompleted() &#123;</div><div class="line"></div><div class="line">                  &#125;</div><div class="line"></div><div class="line">                  @Override</div><div class="line">                  public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">                  &#125;</div><div class="line"></div><div class="line">                  @Override</div><div class="line">                  public void onNext(String s) &#123;</div><div class="line">                      Log.i(TAG, &quot;onNext:&quot;+s);</div><div class="line">                  &#125;</div><div class="line">              &#125;);</div></pre></td></tr></table></figure>
+<p>打印的结果是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">06-06 15:50:11.688 23667-23667/ALOG: onNext:4rxJava</div><div class="line">06-06 15:50:11.688 23667-23667/ALOG: onNext:5rxJava</div></pre></td></tr></table></figure>
+<p>从代码可以看出，首先just进去五个数字，然后通过filter过滤大于3的，然后再通过map把过滤后的添加字符串’rxjava’，在onNext方法打印输出.是不是map也是非常简单的，感觉到rxjava的强大了吧。我们再来看看flateMap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;Person&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void call(Subscriber&lt;? super Person&gt; subscriber) &#123;</div><div class="line">             subscriber.onNext(Person.createPerson());</div><div class="line">        &#125;</div><div class="line">    &#125;).flatMap(new Func1&lt;Person, Observable&lt;Person.PersonProperty&gt;&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public Observable&lt;Person.PersonProperty&gt; call(final Person person) &#123;</div><div class="line">            return Observable.create(new Observable.OnSubscribe&lt;Person.PersonProperty&gt;() &#123;</div><div class="line">                @Override</div><div class="line">                public void call(Subscriber&lt;? super Person.PersonProperty&gt; subscriber) &#123;</div><div class="line">                    for(int i = 0;i &lt; person.getList().size(); i++)&#123;</div><div class="line">                        subscriber.onNext(person.getList().get(i));</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;).subscribe(new Subscriber&lt;Person.PersonProperty&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void onCompleted() &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onNext(Person.PersonProperty personProperty) &#123;</div><div class="line">            Log.i(TAG, &quot;onNext:&quot;+personProperty);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=100, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=101, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=102, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=103, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=104, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=105, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=106, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=107, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=108, name=&apos;张三&apos;&#125;</div><div class="line">06-06 16:54:12.288 15529-15529/ALOG: onNext:PersonProperty&#123;sex=&apos;男&apos;, age=109, name=&apos;张三&apos;&#125;</div></pre></td></tr></table></figure>
+<p>其实我就是创建了一个javaBean， 然后打印姓名以及和这个人的属性， flatMap变换比较难理解，其实就是返回的是一个Obsverable对象，当创建一个Obsverable的时候，他会将里面的参数全部读取出来，然后统一发给Subcribe去打印，其实在上面的代码中我为了大家更容易理解我没有写Obsverable.from，而是利用for循环打印，这样更好理解，更容易看清变换的过程。</p>
+<p>##线程控制Scheduler </p>
+<p>Schedulers.immediate(): 直接在当前线程运行，默认。<br>Schedulers.newThread(): 创建一个线程在新线程执行操作。<br>Schedulers.io(): 其实就是里面含有一个无数量上限的线程池，可以重用空闲的线程。<br>Schedulers.computation(): 一般进行复杂计算所使用的线程。AndroidSchedulers.mainThread():在主线程中运行。</p>
+<p>##结束语<br>也是谢了不少内容，RXJava的基本内容反正是在这儿了，还有很多没有列举出来，大家可以多实践， 我们多多交流。</p>
+<p>#<strong>共勉</strong>。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/探寻Android中MVP设计模式/" rel="next" title="探寻Android中MVP设计模式">
+                <i class="fa fa-chevron-left"></i> 探寻Android中MVP设计模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/25/Android事件的分发(一) /" rel="prev" title="Android事件的分发(一)">
+                Android事件的分发(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="FengHui" />
+          <p class="site-author-name" itemprop="name">FengHui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FengHui</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

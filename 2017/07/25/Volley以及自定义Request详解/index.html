@@ -93,13 +93,23 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="FengHui">
-<meta property="og:url" content="http://shine666.club/index.html">
+<meta name="description" content="google在2013年I/O大会上发布了volley, 主打频繁的网络通信(小请求)。 本身Android就提供了HttpClient和HttpUrlConnection来进行网络请求，可是随着需求不断的提升，比如增加缓存啊，就变得更加复杂了，当然除了volley还有其他很多的优秀的网络请求。比如：OkHttp， Retrofit，xutils等等。当然，今天我们的主题还是volley。 vol">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Volley以及自定义Request详解">
+<meta property="og:url" content="http://shine666.club/2017/07/25/Volley以及自定义Request详解/index.html">
 <meta property="og:site_name" content="FengHui">
+<meta property="og:description" content="google在2013年I/O大会上发布了volley, 主打频繁的网络通信(小请求)。 本身Android就提供了HttpClient和HttpUrlConnection来进行网络请求，可是随着需求不断的提升，比如增加缓存啊，就变得更加复杂了，当然除了volley还有其他很多的优秀的网络请求。比如：OkHttp， Retrofit，xutils等等。当然，今天我们的主题还是volley。 vol">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20160518171514846">
+<meta property="og:image" content="http://img.blog.csdn.net/20160518172033637">
+<meta property="og:image" content="http://img.blog.csdn.net/20160518172303857">
+<meta property="og:image" content="http://img.blog.csdn.net/20160518172621655">
+<meta property="og:image" content="http://img.blog.csdn.net/20160518190851294">
+<meta property="og:updated_time" content="2017-07-25T09:24:13.648Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FengHui">
+<meta name="twitter:title" content="Volley以及自定义Request详解">
+<meta name="twitter:description" content="google在2013年I/O大会上发布了volley, 主打频繁的网络通信(小请求)。 本身Android就提供了HttpClient和HttpUrlConnection来进行网络请求，可是随着需求不断的提升，比如增加缓存啊，就变得更加复杂了，当然除了volley还有其他很多的优秀的网络请求。比如：OkHttp， Retrofit，xutils等等。当然，今天我们的主题还是volley。 vol">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160518171514846">
 
 
 
@@ -127,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://shine666.club/"/>
+  <link rel="canonical" href="http://shine666.club/2017/07/25/Volley以及自定义Request详解/"/>
 
 
 
 
 
-  <title>FengHui</title>
+  <title>Volley以及自定义Request详解 | FengHui</title>
   
 
 
@@ -158,9 +168,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -243,9 +251,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -271,9 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/25/Volley以及自定义Request详解/" itemprop="url">Volley以及自定义Request详解</a></h1>
+          <h1 class="post-title" itemprop="name headline">Volley以及自定义Request详解</h1>
         
 
         <div class="post-meta">
@@ -320,9 +326,7 @@
       
 
       
-        
-          
-            <p>google在2013年I/O大会上发布了volley, 主打频繁的网络通信(小请求)。</p>
+        <p>google在2013年I/O大会上发布了volley, 主打频繁的网络通信(小请求)。</p>
 <p>本身Android就提供了HttpClient和HttpUrlConnection来进行网络请求，可是随着需求不断的提升，比如增加缓存啊，就变得更加复杂了，当然除了volley还有其他很多的优秀的网络请求。比如：OkHttp， Retrofit，xutils等等。当然，今天我们的主题还是volley。</p>
 <p>volley:<a href="https://android.googlesource.com/platform/frameworks/volley" target="_blank" rel="external">https://android.googlesource.com/platform/frameworks/volley</a><br>下载volley然后导入添加依赖就好了。</p>
 <p>volley提供了四种请求方式:StringRequest , JsonObjectRequest, JsonArrayRequest, ImageRequest.<br>首先，我们在使用volley的时候先创建一个请求队列RequestQueue</p>
@@ -514,20 +518,27 @@
 </code></pre><p>典型的换汤不换药，其他基本一样，我在这么写一遍不是侮辱大家的智商么。<br>最后使用的时候请求成功根据传入的泛型数据返回，然而我们将Gson一起封装里面了，so..爽不爽，然后我们直接get<em>*</em> 即可。</p>
 <p>那好吧 就先这样了<br>有什么问题留言撒<br><img src="http://img.blog.csdn.net/20160518190851294" alt="这里写图片描述"></p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -535,21 +546,22 @@
       
 
       
+      
+      
 
       
 
       
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -557,6 +569,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -735,10 +751,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 

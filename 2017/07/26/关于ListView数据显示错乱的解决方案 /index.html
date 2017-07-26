@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://i.imgur.com/lkqd2pb.png">
 <meta property="og:image" content="http://img.blog.csdn.net/20160830185625962">
 <meta property="og:image" content="http://img.blog.csdn.net/20161004154721234">
-<meta property="og:updated_time" content="2017-07-26T01:54:58.737Z">
+<meta property="og:updated_time" content="2017-07-26T02:08:06.198Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于ListView数据显示错乱的解决方案">
 <meta name="twitter:image" content="http://i.imgur.com/lkqd2pb.png">
@@ -321,7 +321,7 @@
       
 
       
-        <p><img src="http://i.imgur.com/lkqd2pb.png" alt=""></p>
+        <p><img src="http://i.imgur.com/lkqd2pb.png" width="600" height="300" align="center"></p>
 <a id="more"></a>
 <p>我们在平常开发Android中经常用到listview, 然而, 这个空间如果不进行优化的写法, 是非常吃内存的. 但是google在2013年IO大会上提出的viewholder写法显然已经是现在的优化标准了, 然而这个优化带来的烦恼也挺多的.<br>首先使用viewholder优化其实就是复用的创建好的item, 然后如果我们在创建好的item上面现实图片或者是在条目上做一些操作显然BUG是挺多的, 比如:我们listview显示的item里面是从网络获取的图片, 那么我们用viewholder优化后, 滑动listview图片会错乱, 会闪烁; 再比如, 我们常见的点赞操作, 我点击某一个条目, 它会给该条目设置一个标识, 然后当我在滑动的时候, 你会发现很奇怪, 怎么下面的item也会有该标识.<br><img src="http://img.blog.csdn.net/20160830185625962" alt="这里写图片描述"></p>
 <p>所以我们为了让listview做到尽量节约内存, 我们还是使用这个优化方案, 反之, 他出现的bug也要解决掉.</p>

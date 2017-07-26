@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20161017190356750">
 <meta property="og:image" content="http://img.blog.csdn.net/20161017190448935">
 <meta property="og:image" content="http://img.blog.csdn.net/20161017190901296">
-<meta property="og:updated_time" content="2017-07-26T01:56:45.960Z">
+<meta property="og:updated_time" content="2017-07-26T02:09:30.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle多环境配置">
 <meta name="twitter:image" content="http://i.imgur.com/DUJ76kt.jpg">
@@ -323,7 +323,7 @@
       
 
       
-        <p><img src="http://i.imgur.com/DUJ76kt.jpg" alt=""></p>
+        <p><img src="http://i.imgur.com/DUJ76kt.jpg" width="600" height="300" align="center"></p>
 <a id="more"></a>
 <p>在开发中遇到了多个不同的环境, 比如测试环境, 上线环境, 甚至根据不同开发组有多个环境, 平常做法就是建一个类来存储, 然后在里面不停的注释来达到切换环境的效果, 其实gradle提供了多环境配置, 配置起来也挺简单的, 也不用之前的无脑注释了.<br><img src="http://img.blog.csdn.net/20161017185930104" alt="这里写图片描述"><br>首先打开自己的gradle, 在buildType里面有当前的两个环境, 一般都是debug环境和replace环境, 如果我们需要两个环境, 比如Test环境和上线环境, 我们只需要在BuildType里面去添加自己所需要的环境即可</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Test &#123;</div><div class="line">    buildConfigField &apos;String&apos;, &apos;Base_URL&apos;, &apos;&quot;http://192.168.1.1&quot;&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>

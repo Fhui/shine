@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -93,21 +93,19 @@
 
 
 
-<meta name="description" content="Android的事件分发是一个重点，同样也是一个难点，用到的地方非常的多，比如复杂的listview和srcoview嵌套， 带有侧拉功能的listView和viewPager相结合，listView下拉刷新和viewPager，很多个例子都是需要事件分发的，碰巧这个玩意又比较复杂，所以我们就来聊一聊Android的事件分发。  #View的事件分发 View事件的分发相对ViewGroup的分发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android事件的分发(一)">
 <meta property="og:url" content="http://shine666.club/2017/07/25/Android事件的分发(一) /index.html">
 <meta property="og:site_name" content="FengHui">
-<meta property="og:description" content="Android的事件分发是一个重点，同样也是一个难点，用到的地方非常的多，比如复杂的listview和srcoview嵌套， 带有侧拉功能的listView和viewPager相结合，listView下拉刷新和viewPager，很多个例子都是需要事件分发的，碰巧这个玩意又比较复杂，所以我们就来聊一聊Android的事件分发。  #View的事件分发 View事件的分发相对ViewGroup的分发">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i.imgur.com/y1lLWjh.png">
 <meta property="og:image" content="http://img.blog.csdn.net/20160607135247766">
 <meta property="og:image" content="http://img.blog.csdn.net/20160607144749656">
 <meta property="og:image" content="http://img.blog.csdn.net/20160608111144447">
-<meta property="og:updated_time" content="2017-07-25T09:35:56.138Z">
+<meta property="og:updated_time" content="2017-07-26T01:24:44.105Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android事件的分发(一)">
-<meta name="twitter:description" content="Android的事件分发是一个重点，同样也是一个难点，用到的地方非常的多，比如复杂的listview和srcoview嵌套， 带有侧拉功能的listView和viewPager相结合，listView下拉刷新和viewPager，很多个例子都是需要事件分发的，碰巧这个玩意又比较复杂，所以我们就来聊一聊Android的事件分发。  #View的事件分发 View事件的分发相对ViewGroup的分发">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160607135247766">
+<meta name="twitter:image" content="http://i.imgur.com/y1lLWjh.png">
 
 
 
@@ -115,7 +113,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     motion: true,
@@ -324,7 +322,9 @@
       
 
       
-        <p>Android的事件分发是一个重点，同样也是一个难点，用到的地方非常的多，比如复杂的listview和srcoview嵌套， 带有侧拉功能的listView和viewPager相结合，listView下拉刷新和viewPager，很多个例子都是需要事件分发的，碰巧这个玩意又比较复杂，所以我们就来聊一聊Android的事件分发。</p>
+        <p><img src="http://i.imgur.com/y1lLWjh.png" alt=""></p>
+<a id="more"></a>
+<p>Android的事件分发是一个重点，同样也是一个难点，用到的地方非常的多，比如复杂的listview和srcoview嵌套， 带有侧拉功能的listView和viewPager相结合，listView下拉刷新和viewPager，很多个例子都是需要事件分发的，碰巧这个玩意又比较复杂，所以我们就来聊一聊Android的事件分发。</p>
 <p><img src="http://img.blog.csdn.net/20160607135247766" alt="这里写图片描述"></p>
 <p>#View的事件分发</p>
 <p>View事件的分发相对ViewGroup的分发来说还是比较简单的。我们先从View事件分发先来说起。上代码———-&gt;</p>
@@ -520,7 +520,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Mist
   </a>
 </div>
 

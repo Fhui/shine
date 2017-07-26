@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -93,22 +93,20 @@
 
 
 
-<meta name="description" content="这是Android事件分发讲解的第二篇， 在上篇我讲过View的事件分发，感兴趣的或者没有看过的可以再去温习一遍。一定要有不屈的精神， 哈哈。今天我们来搞下ViewGroup的事件分发，这个博主感觉要比View事件分发复杂一点点，但是也不难。 #ViewGroup 上篇博客我们在讲View的事件分发的时候讲过了， 当手指触摸屏幕的时候肯定会调用dispathTouchEvent方法，那么View和">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android事件的分发(二)">
 <meta property="og:url" content="http://shine666.club/2017/07/25/Android事件的分发(二) /index.html">
 <meta property="og:site_name" content="FengHui">
-<meta property="og:description" content="这是Android事件分发讲解的第二篇， 在上篇我讲过View的事件分发，感兴趣的或者没有看过的可以再去温习一遍。一定要有不屈的精神， 哈哈。今天我们来搞下ViewGroup的事件分发，这个博主感觉要比View事件分发复杂一点点，但是也不难。 #ViewGroup 上篇博客我们在讲View的事件分发的时候讲过了， 当手指触摸屏幕的时候肯定会调用dispathTouchEvent方法，那么View和">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i.imgur.com/y1lLWjh.png">
 <meta property="og:image" content="http://img.blog.csdn.net/20160613092042036">
 <meta property="og:image" content="http://img.blog.csdn.net/20160613112206016">
 <meta property="og:image" content="http://img.blog.csdn.net/20160613112930429">
 <meta property="og:image" content="http://img.blog.csdn.net/20160613143320170">
-<meta property="og:updated_time" content="2017-07-25T09:36:55.051Z">
+<meta property="og:updated_time" content="2017-07-26T01:24:25.642Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android事件的分发(二)">
-<meta name="twitter:description" content="这是Android事件分发讲解的第二篇， 在上篇我讲过View的事件分发，感兴趣的或者没有看过的可以再去温习一遍。一定要有不屈的精神， 哈哈。今天我们来搞下ViewGroup的事件分发，这个博主感觉要比View事件分发复杂一点点，但是也不难。 #ViewGroup 上篇博客我们在讲View的事件分发的时候讲过了， 当手指触摸屏幕的时候肯定会调用dispathTouchEvent方法，那么View和">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160613092042036">
+<meta name="twitter:image" content="http://i.imgur.com/y1lLWjh.png">
 
 
 
@@ -116,7 +114,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     motion: true,
@@ -325,7 +323,10 @@
       
 
       
-        <p>这是Android事件分发讲解的第二篇， 在上篇我讲过View的事件分发，感兴趣的或者没有看过的可以再去<a href="http://blog.csdn.net/huiiiiiiii/article/details/51603720" target="_blank" rel="external"><strong>温习一遍</strong></a>。<br>一定要有不屈的精神， 哈哈。<br><img src="http://img.blog.csdn.net/20160613092042036" alt="这里写图片描述"><br>今天我们来搞下ViewGroup的事件分发，这个博主感觉要比View事件分发复杂一点点，但是也不难。</p>
+        <p><img src="http://i.imgur.com/y1lLWjh.png" alt=""></p>
+<a id="more"></a>
+<p>这是Android事件分发讲解的第二篇， 在上篇我讲过View的事件分发，感兴趣的或者没有看过的可以再去<a href="http://blog.csdn.net/huiiiiiiii/article/details/51603720" target="_blank" rel="external"><strong>温习一遍</strong></a>。<br>一定要有不屈的精神， 哈哈。<br><img src="http://img.blog.csdn.net/20160613092042036" alt="这里写图片描述"></p>
+<p>今天我们来搞下ViewGroup的事件分发，这个博主感觉要比View事件分发复杂一点点，但是也不难。</p>
 <p>#ViewGroup</p>
 <p>上篇博客我们在讲View的事件分发的时候讲过了， 当手指触摸屏幕的时候肯定会调用dispathTouchEvent方法，那么View和ViewGroup有什么区别？我简要的说下，我们所有能看得到的控件都是直接或间接的继承自View, 比如Button，TextView等等，太多了。那么ViewGroup是什么？说白了我们常用的布局都是继承自ViewGroup, LinearLayout, RelativeLayout， 那么，当我们用到写自定义控件的时候， 感觉会更强烈， 自定义View和自定义ViewGroup, 好， 那么我们先来看看ViewGroup是如何事件分发的？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;LinearLayout</div><div class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/btn_test&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:text=&quot;test_onTouch&quot;</div><div class="line">        android:layout_centerInParent=&quot;true&quot;/&gt;</div><div class="line"></div><div class="line">    &lt;com.customview.CustomViewGroup</div><div class="line">        android:id=&quot;@+id/custom_group&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;match_parent&quot;</div><div class="line">        android:clickable=&quot;true&quot;&gt;</div><div class="line">    &lt;/com.customview.CustomViewGroup&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
@@ -525,7 +526,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Mist
   </a>
 </div>
 

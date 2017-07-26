@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -93,23 +93,21 @@
 
 
 
-<meta name="description" content="Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。此图是我从泡网上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="探寻Android中MVP设计模式">
 <meta property="og:url" content="http://shine666.club/2017/07/25/探寻Android中MVP设计模式/index.html">
 <meta property="og:site_name" content="FengHui">
-<meta property="og:description" content="Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。此图是我从泡网上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i.imgur.com/8KhioGQ.png">
 <meta property="og:image" content="http://img.blog.csdn.net/20160526115303276">
 <meta property="og:image" content="http://img.blog.csdn.net/20160526131655850">
 <meta property="og:image" content="http://img.blog.csdn.net/20160526132901604">
 <meta property="og:image" content="http://img.blog.csdn.net/20160526134308987">
 <meta property="og:image" content="http://img.blog.csdn.net/20160526135957650">
-<meta property="og:updated_time" content="2017-07-25T09:33:26.944Z">
+<meta property="og:updated_time" content="2017-07-26T01:45:40.415Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探寻Android中MVP设计模式">
-<meta name="twitter:description" content="Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。此图是我从泡网上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160526115303276">
+<meta name="twitter:image" content="http://i.imgur.com/8KhioGQ.png">
 
 
 
@@ -117,7 +115,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     motion: true,
@@ -326,7 +324,9 @@
       
 
       
-        <p>Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。<br><img src="http://img.blog.csdn.net/20160526115303276" alt="这里写图片描述"><br>此图是我从<a href="http://www.jcodecraeer.com/" target="_blank" rel="external">泡网</a>上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。<br>MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的， 然而我们把一些逻辑写到controller中会使activitry或者fragment中代码巨多， 增加了代码的维护性，没准下一个开发者去维护代码是都要崩溃了<img src="http://img.blog.csdn.net/20160526131655850" alt="这里写图片描述"><br>下面我们进入今天的主题———-&gt;MVP<br>在MVP中， 每个字母都代表着什么？因为它是从MVC升级而来， 所以除了P其余都相同</p>
+        <p><img src="http://i.imgur.com/8KhioGQ.png" alt=""><br><a id="more"></a></p>
+<p>Android中mvp现在炙手可热的设计模式之一，在讲解mvp模式之前我们先看看图。<br><img src="http://img.blog.csdn.net/20160526115303276" alt="这里写图片描述"><br>此图是我从<a href="http://www.jcodecraeer.com/" target="_blank" rel="external">泡网</a>上拔下来的，如果不可以这么做请联系我，我会删除的， 谢谢。</p>
+<p>MVP是MVC升级来的， 如果有对MVC不了解的同学请自行百度， 我在这儿就说下MVC的缺点， android其实并没有标准的mvc模式， 而我们习惯性的把Activity当作Controller去使用， 而且在MVC中是允许M层和V层有交互的， 然而我们把一些逻辑写到controller中会使activitry或者fragment中代码巨多， 增加了代码的维护性，没准下一个开发者去维护代码是都要崩溃了<img src="http://img.blog.csdn.net/20160526131655850" alt="这里写图片描述"><br>下面我们进入今天的主题———-&gt;MVP<br>在MVP中， 每个字母都代表着什么？因为它是从MVC升级而来， 所以除了P其余都相同</p>
 <ul>
 <li>M:Module层， 也就是我们平常写的模型(JavaBean), 业务逻辑也是在这儿。</li>
 <li>V:View层， Activity， 自定义的View等等</li>
@@ -517,7 +517,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Mist
   </a>
 </div>
 

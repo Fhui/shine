@@ -94,15 +94,16 @@
 
 
 <meta property="og:type" content="article">
-<meta property="og:title" content="EventBus消息类型重复解决方案">
-<meta property="og:url" content="http://shine666.club/2017/07/25/EventBus消息类型重复解决方案 /index.html">
+<meta property="og:title" content="Android适配--dimen">
+<meta property="og:url" content="http://shine666.club/2017/07/26/Android适配--dimen/index.html">
 <meta property="og:site_name" content="ShineF">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://i.imgur.com/1FbR8Ql.png">
-<meta property="og:updated_time" content="2017-07-26T02:09:51.890Z">
+<meta property="og:image" content="http://i.imgur.com/aYn148O.jpg">
+<meta property="og:image" content="http://img.blog.csdn.net/20160519111525096">
+<meta property="og:updated_time" content="2017-07-26T05:05:39.930Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EventBus消息类型重复解决方案">
-<meta name="twitter:image" content="http://i.imgur.com/1FbR8Ql.png">
+<meta name="twitter:title" content="Android适配--dimen">
+<meta name="twitter:image" content="http://i.imgur.com/aYn148O.jpg">
 
 
 
@@ -130,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://shine666.club/2017/07/25/EventBus消息类型重复解决方案 /"/>
+  <link rel="canonical" href="http://shine666.club/2017/07/26/Android适配--dimen/"/>
 
 
 
 
 
-  <title>EventBus消息类型重复解决方案 | ShineF</title>
+  <title>Android适配--dimen | ShineF</title>
   
 
 
@@ -255,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/EventBus消息类型重复解决方案 /">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/26/Android适配--dimen/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ShineF">
@@ -272,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">EventBus消息类型重复解决方案</h1>
+          <h1 class="post-title" itemprop="name headline">Android适配--dimen</h1>
         
 
         <div class="post-meta">
@@ -284,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:26:52+08:00">
-                2017-07-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-26T13:05:39+08:00">
+                2017-07-26
               </time>
             
 
@@ -319,41 +320,51 @@
       
 
       
-        <p><img src="http://i.imgur.com/1FbR8Ql.png" width="600" height="300" align="center"></p>
+        <p><img src="http://i.imgur.com/aYn148O.jpg" width="600" height="300" align="center"></p>
 <a id="more"></a>
-<p>我们平常在开发中各个组件进行数据交互也是常有的事，EventBus很好的解决了我们平常各组件数据交互时的代码量，但是我们在使用的时候会发现，如果每个页面发送的都是String类型的，在想接收的页面上接收也是String类型的，那么它会全部接收到，所以需要加一个判断，下面演示下解决方案吧，当然还有好多，另外还有很多类似于EventBus这种开源库，RXJava等等。</p>
-<p>EventBus在V1.0.4的时候发布粘性事件，可以发送对象，但是需要手动注销掉。所以我们借助这个粘性事件来搞起。</p>
-<p>我们首先创建一个Event类来存储信息 </p>
-<pre><code>public T data;
-public Message msg;
-public static enum Message{
-    test;
+<p>我发现网上关于socket的库介绍比较少啊，难道socket太简单了，大家不喜欢做？哈哈哈<img src="http://img.blog.csdn.net/20160519111525096" alt="这里写图片描述"></p>
+<p>我给大家推荐一个socketclient库，用起来特别方便，主要是源于前几天公司需要长连接，正好逛GitHub的时候发现的这个库，挺爽挺方便的，推荐给大家。</p>
+<p>git:<a href="https://github.com/vilyever/AndroidSocketClient" target="_blank" rel="external">https://github.com/vilyever/AndroidSocketClient</a></p>
+<p>下载完导入，然后再gradle中添加        </p>
+<pre><code>                repositories {
+              maven { url &quot;https://jitpack.io&quot; }
+              }
+              dependencies {
+  compile &apos;com.github.vilyever:AndroidSocketClient:1.4.1&apos;
 }
+</code></pre><p>至于用法也是非常简单</p>
+<pre><code>private SocketClient socketClient;
+</code></pre><p>创建scoketClient.</p>
+<pre><code>socketClient = new SocketClient(url, prot);
+</code></pre><p>里面传入socketClient的url地址和端口号。<br>                socketClient.registerSocketDelegate(new SocketClient.SocketDelegate(){</p>
+<pre><code>    @Override
+    public void onConnected(SocketClient client) {
+        socketClient.send(&quot;hello, server !---------------------------&gt;Android&quot;);
+        socketClient.setHeartBeatMessage(&quot;hello, server !---------------------------&gt;Android&quot;);
+    }
 
-public AppEvent(){
-
-}
-
-public AppEvent(Message msg, T data){
-    this.msg = msg;
-    this.data = data;
-}
-
-public Message getMessage() {
-    return msg;
-}
-
-public &lt;T&gt;T getData(){
-    if(data == null){
+    @Override
+    public void onDisconnected(SocketClient client) {
+        Log.i(&quot;Server&quot;, &quot;timeout&quot;);
+        String error = client.getCharsetName();
+        Log.i(&quot;Server&quot;, &quot;timeoutData:&quot;+error);
 
     }
-    return (T)data;
-}
 
-public static &lt;T&gt; void post(Message msg, T data){
-    EventBus.getDefault().postSticky(new AppEvent(msg, data));
-}
-</code></pre><p>我们放入一个枚举类， 里面存储一些信息，然后我们发送的时候直接发送该类的post方法，然后接收onEvent(Appevent event), 然后通过message来switch判断，简单方便便捷。<br>说白了就是加个判断呗。简单记录下。</p>
+    @Override
+    public void onResponse(SocketClient client, @NonNull SocketResponsePacket responsePacket) {
+        String responseMsg = responsePacket.getMessage();
+        int i = 1;
+        Log.i(&quot;Server&quot;, responseMsg);
+    }
+});
+</code></pre><p>这个方法直接实现了socket发送信息到服务器，在onDisconnected()错误信息也可以及时返回并打印。</p>
+<pre><code>socketClient.setConnectionTimeout(1000 * 15);
+socketClient.setHeartBeatInterval(1000);
+socketClient.setRemoteNoReplyAliveTimeout(1000 * 60);
+socketClient.setCharsetName(&quot;UTF-8&quot;);
+socketClient.connect();
+</code></pre><p>这边设置的是超时时间，心跳包的间隔， 自动连接时间，编码格式。<br>是不是用起来特别爽？<br>因为库也是国人写的，注释都是中文，大家可以扒一扒源代码看如何实现， 毕竟学东西不只是学如何使用，还要追求原理的。</p>
 
       
     </div>
@@ -411,8 +422,8 @@ public static &lt;T&gt; void post(Message msg, T data){
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/25/Volley以及自定义Request详解/" rel="next" title="Volley以及自定义Request详解">
-                <i class="fa fa-chevron-left"></i> Volley以及自定义Request详解
+              <a href="/2017/07/26/Android初识BLE4.0 /" rel="next" title="Android初识BLE4.0">
+                <i class="fa fa-chevron-left"></i> Android初识BLE4.0
               </a>
             
           </div>
@@ -421,8 +432,8 @@ public static &lt;T&gt; void post(Message msg, T data){
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/25/AndroidSocketClient开源库的使用 /" rel="prev" title="AndroidSocketClient开源库的使用">
-                AndroidSocketClient开源库的使用 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/07/26/EventBus消息类型重复解决方案 /" rel="prev" title="EventBus消息类型重复解决方案">
+                EventBus消息类型重复解决方案 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

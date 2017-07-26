@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android初识BLE4.0">
+<meta property="og:url" content="http://shine666.club/2017/07/25/Android初识BLE4.0 /index.html">
+<meta property="og:site_name" content="FengHui">
+<meta property="og:description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701110855824">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701111240374">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701111518530">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701111900641">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701114923483">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701140448920">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701143833388">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701145701571">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701150005439">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701151245279">
+<meta property="og:image" content="http://img.blog.csdn.net/20160701153344766">
+<meta property="og:updated_time" content="2017-07-25T09:41:50.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android初识BLE4.0">
+<meta name="twitter:description" content="随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开官方文档查阅资料了。打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160701110855824">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shine666.club/2017/07/25/Android初识BLE4.0 /"/>
+
+
+
+
+
+  <title>Android初识BLE4.0 | FengHui</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">FengHui</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Android初识BLE4.0 /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android初识BLE4.0</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:39:50+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。<br>在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开<a href="https://developer.android.com/guide/topics/connectivity/bluetooth-le.html#terms" target="_blank" rel="external">官方文档</a>查阅资料了。<br><img src="http://img.blog.csdn.net/20160701110855824" alt="这里写图片描述"><br>打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其的一番介绍，现在分为经典蓝牙和低功耗蓝牙(BLE4.0), 然而现在都是BLE4.0，所以我们直接去看BLE4.0.<br><img src="http://img.blog.csdn.net/20160701111240374" alt="这里写图片描述"><br>大概就是低功耗蓝牙是从api18开始添加进去的，可以用于一些设备的使用…<br><img src="http://img.blog.csdn.net/20160701111518530" alt="这里写图片描述"><br>提供了一些概念的介绍<br>首先在使用蓝牙之前需要在清单文件中添加权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;uses-permission android:name=&quot;android.permission.BLUETOOTH&quot;/&gt;</div><div class="line">&lt;uses-permission android:name=&quot;android.permission.BLUETOOTH_ADMIN&quot;/&gt;</div></pre></td></tr></table></figure>
+<p>然后Google给我们提供了关键类的查看<br><img src="http://img.blog.csdn.net/20160701111900641" alt="这里写图片描述"><br>我们先来看BluetoothAdapter<br>这个类就是ble连接主要大类之一，好多关键操作都在这个类中进行操作。<br><img src="http://img.blog.csdn.net/20160701114923483" alt="这里写图片描述"><br>官方给的描述就是这是一个蓝牙适配器。可以实例化bluetoothDevice和BluetoothSocket<br>下面我来介绍下如何使用:在使用BLE4.0之前最好友好的检查一下蓝牙是否可用，是否支持BLE4.0设备。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 设备是否支持BLE4.0</div><div class="line"> * @time 2016/6/17 0017 10:59</div><div class="line"> */</div><div class="line">public boolean judgeBuletooh() &#123;</div><div class="line">	if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) &#123;</div><div class="line">		return false;</div><div class="line">	&#125; else &#123;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//检查是否支持BLE4.0</div><div class="line">		if (!judgeBuletooh()) &#123;</div><div class="line">			Toast.makeText(context, &quot;您的设备不支持ble4.0&quot;, Toast.LENGTH_SHORT).show();</div><div class="line">			finish();</div><div class="line">		&#125;</div><div class="line">		//检查是否支持蓝牙</div><div class="line">		if (bluetoothAdapter == null) &#123;</div><div class="line">			Toast.makeText(context, &quot;您的设备不支持bluetooth&quot;, Toast.LENGTH_SHORT).show();</div><div class="line">			finish();</div><div class="line">			return;</div><div class="line">		&#125;</div><div class="line">		//开启蓝牙</div><div class="line">		bluetoothAdapter.enable();</div><div class="line">		bluetoothLe = new MyBluetoothLe(this);</div><div class="line">		if (!bluetoothLe.initialize()) &#123;</div><div class="line">			Toast.makeText(context, &quot;初始化MyBluetoothLe失败&quot;, Toast.LENGTH_SHORT).show();</div><div class="line">			finish();</div><div class="line">		&#125;</div></pre></td></tr></table></figure>
+<p>获取bluetoothAdapter有两种途径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothAdapter = bluetoothManager.getAdapter();</div></pre></td></tr></table></figure>
+<p>这样就获得了bluetoothAdapter了，然后我们就可以开启蓝牙了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothAdapter.enable();</div></pre></td></tr></table></figure>
+<p>开启蓝牙后扫描设备</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothAdapter.startLeScan(LeScanCallback callback);</div></pre></td></tr></table></figure>
+<p>扫描设备，里面穿了一个参数LeScanCallback, 我们去文档上找找这是个什么东西。<br><img src="http://img.blog.csdn.net/20160701140448920" alt="这里写图片描述"><br>官方文档上显示回调接口用来实现扫描结果。<br>显而易见，那么我们就写一个<code>LeScanCallback</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.LeScanCallback() &#123;</div><div class="line">		@Override</div><div class="line">		public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) &#123;</div><div class="line">			</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>重写了LeScanCallback实现了里面的onLeSean方法，让我们看看这些参数都是什么，第一个就是扫描到的设备，第二个就是蓝牙的rssi值，这个值就是测试蓝牙设备与终端的距离，第三个就是扫描的设备提供的内容，这时候我们可以创建一个集合了，然后添加进去，将扫描的设备动态的显示出来。<br>我们扫描的做好了，那么我们应该找到了设备准备进行连接了。需要连接首先是要找到要连接的设备的，这个设备是BluetoothDevice类型的，我们再来看看文档上对这个类的说明。<br><img src="http://img.blog.csdn.net/20160701143833388" alt="这里写图片描述"><br>官方的意思就是说这代表着一个远程的蓝牙设备，你可以获取它的信息。等等等…<br><img src="http://img.blog.csdn.net/20160701145701571" alt="这里写图片描述"><br>它有一个<code>getAddress()</code> 方法就是获取地址值<br>然后我们再看BluetoothDevice提供的连接方法<br><img src="http://img.blog.csdn.net/20160701150005439" alt="这里写图片描述"><br>传入一个上下文，是否自动连接，以及一个BluetoothGattCallback回调<br>我们再来看看BluetoothGattCallback回调<br><img src="http://img.blog.csdn.net/20160701151245279" alt="这里写图片描述"><br>官方解释：这是一个抽象类用来实现BluetoothGatt回调<br>我们来写一个BluetoothGatt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">private BluetoothGattCallback gattCallback = new BluetoothGattCallback() &#123;</div><div class="line">        @Override</div><div class="line">        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) &#123;</div><div class="line">      if(newState == BluetoothProfile.STATE_CONNECTED)&#123;</div><div class="line">              </div><div class="line">       &#125;else if(newState ==BluetoothProfile.STATE_DISCONNECTED)&#123;</div><div class="line">         </div><div class="line">        &#125;else if(newState == BluetoothProfile.STATE_CONNECTING)&#123;</div><div class="line">     </div><div class="line">           &#125;else if(newState == BluetoothProfile.STATE_DISCONNECTING)&#123;</div><div class="line"></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onServicesDiscovered(BluetoothGatt gatt, int status) &#123;</div><div class="line">           </div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) &#123;</div><div class="line">   </div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) &#123;</div><div class="line">   </div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) &#123;</div><div class="line">   </div><div class="line">     &#125;;</div></pre></td></tr></table></figure>
+<p>重写了辣么多方法，看着真恐怖哈，其实每个方法都很重要，慢慢解释。</p>
+<p><code>public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {</code><br>这个说白了就是监听蓝牙的状态的，我上面吧一些状态写出来了，直接用newState判断即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onServicesDiscovered(BluetoothGatt gatt, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是发现服务后的回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是读取特征操作的结果回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是写入特种操作结果回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)</div></pre></td></tr></table></figure>
+<p>这个方法就是特征发生改变的时候回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是对这个描述符号写操作的回调<br>这里面每个方法都有一个共同的参数就是BluetoothGatt<br>我们再来看一看这个类是干什么的。<br><img src="http://img.blog.csdn.net/20160701153344766" alt="这里写图片描述"><br>Google说这个类提供了启动蓝牙连接设备，发现设备，以及扫描过程<br>我们可以在<code>onConnectionStateChange</code> 查看蓝牙的状态并作出相应的操作，<br>写入特征与读取都可以在对应的方法中写出业务逻辑即可。<br>记得连接成功后一定要关闭扫描。<br>另外，当断开后再立马开始扫描会容易使蓝牙崩溃掉，还有Google提供的蓝牙自动连接并不稳定，节省资源再对应的生命周期方法中关闭掉蓝牙停止扫描。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/Mac上使用Hexo+github搭建自己的博客/" rel="next" title="Mac上使用Hexo+github搭建自己的博客">
+                <i class="fa fa-chevron-left"></i> Mac上使用Hexo+github搭建自己的博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="FengHui" />
+          <p class="site-author-name" itemprop="name">FengHui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FengHui</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

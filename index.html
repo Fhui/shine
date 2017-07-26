@@ -254,6 +254,273 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Android初识BLE4.0 /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/Android初识BLE4.0 /" itemprop="url">Android初识BLE4.0</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:39:50+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>随着时代的发展，我们用到蓝牙的地方越来越多，android也从api18开始支持BLE4.0, 今天博客的主题就是BLE4.0，主要就是介绍如何使用以及运作的流程。<br>在蓝牙方面的资料，还是比较少的，我感觉android对于蓝牙封装上面还是不是很友好。希望以后会改进吧，对于这样，我们只能打开<a href="https://developer.android.com/guide/topics/connectivity/bluetooth-le.html#terms" target="_blank" rel="external">官方文档</a>查阅资料了。<br><img src="http://img.blog.csdn.net/20160701110855824" alt="这里写图片描述"><br>打开bluetooth包，我们可以看到这个包是从API5添加进去的，然后就是Google对其的一番介绍，现在分为经典蓝牙和低功耗蓝牙(BLE4.0), 然而现在都是BLE4.0，所以我们直接去看BLE4.0.<br><img src="http://img.blog.csdn.net/20160701111240374" alt="这里写图片描述"><br>大概就是低功耗蓝牙是从api18开始添加进去的，可以用于一些设备的使用…<br><img src="http://img.blog.csdn.net/20160701111518530" alt="这里写图片描述"><br>提供了一些概念的介绍<br>首先在使用蓝牙之前需要在清单文件中添加权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;uses-permission android:name=&quot;android.permission.BLUETOOTH&quot;/&gt;</div><div class="line">&lt;uses-permission android:name=&quot;android.permission.BLUETOOTH_ADMIN&quot;/&gt;</div></pre></td></tr></table></figure>
+<p>然后Google给我们提供了关键类的查看<br><img src="http://img.blog.csdn.net/20160701111900641" alt="这里写图片描述"><br>我们先来看BluetoothAdapter<br>这个类就是ble连接主要大类之一，好多关键操作都在这个类中进行操作。<br><img src="http://img.blog.csdn.net/20160701114923483" alt="这里写图片描述"><br>官方给的描述就是这是一个蓝牙适配器。可以实例化bluetoothDevice和BluetoothSocket<br>下面我来介绍下如何使用:在使用BLE4.0之前最好友好的检查一下蓝牙是否可用，是否支持BLE4.0设备。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 设备是否支持BLE4.0</div><div class="line"> * @time 2016/6/17 0017 10:59</div><div class="line"> */</div><div class="line">public boolean judgeBuletooh() &#123;</div><div class="line">	if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) &#123;</div><div class="line">		return false;</div><div class="line">	&#125; else &#123;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//检查是否支持BLE4.0</div><div class="line">		if (!judgeBuletooh()) &#123;</div><div class="line">			Toast.makeText(context, &quot;您的设备不支持ble4.0&quot;, Toast.LENGTH_SHORT).show();</div><div class="line">			finish();</div><div class="line">		&#125;</div><div class="line">		//检查是否支持蓝牙</div><div class="line">		if (bluetoothAdapter == null) &#123;</div><div class="line">			Toast.makeText(context, &quot;您的设备不支持bluetooth&quot;, Toast.LENGTH_SHORT).show();</div><div class="line">			finish();</div><div class="line">			return;</div><div class="line">		&#125;</div><div class="line">		//开启蓝牙</div><div class="line">		bluetoothAdapter.enable();</div><div class="line">		bluetoothLe = new MyBluetoothLe(this);</div><div class="line">		if (!bluetoothLe.initialize()) &#123;</div><div class="line">			Toast.makeText(context, &quot;初始化MyBluetoothLe失败&quot;, Toast.LENGTH_SHORT).show();</div><div class="line">			finish();</div><div class="line">		&#125;</div></pre></td></tr></table></figure>
+<p>获取bluetoothAdapter有两种途径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothAdapter = bluetoothManager.getAdapter();</div></pre></td></tr></table></figure>
+<p>这样就获得了bluetoothAdapter了，然后我们就可以开启蓝牙了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothAdapter.enable();</div></pre></td></tr></table></figure>
+<p>开启蓝牙后扫描设备</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bluetoothAdapter.startLeScan(LeScanCallback callback);</div></pre></td></tr></table></figure>
+<p>扫描设备，里面穿了一个参数LeScanCallback, 我们去文档上找找这是个什么东西。<br><img src="http://img.blog.csdn.net/20160701140448920" alt="这里写图片描述"><br>官方文档上显示回调接口用来实现扫描结果。<br>显而易见，那么我们就写一个<code>LeScanCallback</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.LeScanCallback() &#123;</div><div class="line">		@Override</div><div class="line">		public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) &#123;</div><div class="line">			</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>重写了LeScanCallback实现了里面的onLeSean方法，让我们看看这些参数都是什么，第一个就是扫描到的设备，第二个就是蓝牙的rssi值，这个值就是测试蓝牙设备与终端的距离，第三个就是扫描的设备提供的内容，这时候我们可以创建一个集合了，然后添加进去，将扫描的设备动态的显示出来。<br>我们扫描的做好了，那么我们应该找到了设备准备进行连接了。需要连接首先是要找到要连接的设备的，这个设备是BluetoothDevice类型的，我们再来看看文档上对这个类的说明。<br><img src="http://img.blog.csdn.net/20160701143833388" alt="这里写图片描述"><br>官方的意思就是说这代表着一个远程的蓝牙设备，你可以获取它的信息。等等等…<br><img src="http://img.blog.csdn.net/20160701145701571" alt="这里写图片描述"><br>它有一个<code>getAddress()</code> 方法就是获取地址值<br>然后我们再看BluetoothDevice提供的连接方法<br><img src="http://img.blog.csdn.net/20160701150005439" alt="这里写图片描述"><br>传入一个上下文，是否自动连接，以及一个BluetoothGattCallback回调<br>我们再来看看BluetoothGattCallback回调<br><img src="http://img.blog.csdn.net/20160701151245279" alt="这里写图片描述"><br>官方解释：这是一个抽象类用来实现BluetoothGatt回调<br>我们来写一个BluetoothGatt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">private BluetoothGattCallback gattCallback = new BluetoothGattCallback() &#123;</div><div class="line">        @Override</div><div class="line">        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) &#123;</div><div class="line">      if(newState == BluetoothProfile.STATE_CONNECTED)&#123;</div><div class="line">              </div><div class="line">       &#125;else if(newState ==BluetoothProfile.STATE_DISCONNECTED)&#123;</div><div class="line">         </div><div class="line">        &#125;else if(newState == BluetoothProfile.STATE_CONNECTING)&#123;</div><div class="line">     </div><div class="line">           &#125;else if(newState == BluetoothProfile.STATE_DISCONNECTING)&#123;</div><div class="line"></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onServicesDiscovered(BluetoothGatt gatt, int status) &#123;</div><div class="line">           </div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) &#123;</div><div class="line">   </div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) &#123;</div><div class="line">   </div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) &#123;</div><div class="line">   </div><div class="line">     &#125;;</div></pre></td></tr></table></figure>
+<p>重写了辣么多方法，看着真恐怖哈，其实每个方法都很重要，慢慢解释。</p>
+<p><code>public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {</code><br>这个说白了就是监听蓝牙的状态的，我上面吧一些状态写出来了，直接用newState判断即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onServicesDiscovered(BluetoothGatt gatt, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是发现服务后的回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是读取特征操作的结果回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是写入特种操作结果回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)</div></pre></td></tr></table></figure>
+<p>这个方法就是特征发生改变的时候回调</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status)</div></pre></td></tr></table></figure>
+<p>这个方法就是对这个描述符号写操作的回调<br>这里面每个方法都有一个共同的参数就是BluetoothGatt<br>我们再来看一看这个类是干什么的。<br><img src="http://img.blog.csdn.net/20160701153344766" alt="这里写图片描述"><br>Google说这个类提供了启动蓝牙连接设备，发现设备，以及扫描过程<br>我们可以在<code>onConnectionStateChange</code> 查看蓝牙的状态并作出相应的操作，<br>写入特征与读取都可以在对应的方法中写出业务逻辑即可。<br>记得连接成功后一定要关闭扫描。<br>另外，当断开后再立马开始扫描会容易使蓝牙崩溃掉，还有Google提供的蓝牙自动连接并不稳定，节省资源再对应的生命周期方法中关闭掉蓝牙停止扫描。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Mac上使用Hexo+github搭建自己的博客/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FengHui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FengHui">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/25/Mac上使用Hexo+github搭建自己的博客/" itemprop="url">Mac上使用Hexo+github搭建自己的博客</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T17:39:15+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>推荐大家购买一个域名，这样使用起来方便的多。购买域名有好多种方式，为了避免冲突，大家自行购买。另外博主使用的是mac，所以，今天的教程主题是mac系统，不过windows系统大同小异，原理是一样的，只不过Mac集成了不少环境，变得更方便。<br>因为hexo基于node.js, 所以我们直接下载<a href="https://nodejs.org/en/" target="_blank" rel="external">nodejs</a>。当然也得下载<a href="https://git-scm.com/" target="_blank" rel="external">Git</a>, 因为我们是结合Github吗，所以工具是少一不可。<br>安装好，开始安装hexo，<br>控制台－－&gt; <code>sudo npm install -g hexo</code> 自动安装<br>找一个比较显著的位置建立一个文件夹, 楼主是强迫症，所以在applications里面创建的文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /applications/hexo</div></pre></td></tr></table></figure>
+<p>进入这个hexo文件夹目录下，然后<code>hexo init</code></p>
+<p>初始化hexo，它会生成一大堆静态网站文件。</p>
+<p>这时候在<code>hexo server</code></p>
+<p>它会给你一个ip地址，然后你直接copy到浏览器访问就能看到欢迎页面”hello world”了</p>
+<p>接着输入－－&gt; <code>hexo init</code><br>最好在写一下这个指令－－&gt; <code>npm install hexo-deployer-git --save</code></p>
+<p>为了防止最后部署到Github上面的时候出现 <code>Deployer not found: github</code>或者部署到服务器的时候出现错误所以最好搞一下。</p>
+<p>好了，这个时候我们基本搞好了，其他的都先不管，我们先部署到Github上再说。前方高能预警！<br><img src="http://img.blog.csdn.net/20160627162706968" alt="这里写图片描述"><br>首先我们登录Github<br><img src="http://img.blog.csdn.net/20160627162921475" alt="这里写图片描述"><br>登录成功后点击创建一个新的仓库<br><img src="http://img.blog.csdn.net/20160627163145380" alt="这里写图片描述"><br>输入仓库名以及描述，接着创建成功。<br>好，我们此时再回到终端创建私钥与我们创建的远程仓库进行关联。<br>我们首先输入<code>cd ~/.ssh</code>看看是否有安装过这个ssh私钥如果没有会提示没有找到文件。<br>其中会让你输入一次密码，四位数以上的，谨记，以后会用到。<br>接着输入<code>ssh-keygen -t rsa -C &quot;email&quot;</code><br>然后它会出现这个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Enter file in which to save the key (/Users/HIMan/.ssh/id_rsa):</div></pre></td></tr></table></figure>
+<p>就是询问你的ssh保存到哪儿，以及让你输入你的id_rsa，你可以自定义id_rsa但是最好不要改变路径，要不然后面会变得特别恶心。<br>好了，然后打开Finder找到保存的公钥，然后打开Github仓库，点击setting，然后创建一个ssh， 然后吧公钥的内容复制进去。<br>这时候已经连接成功。<br>现在回到Github<br><img src="http://img.blog.csdn.net/20160627165322083" alt="这里写图片描述"><br>打开我们创建的仓库，点击设置，找到Github pages选项，然后点击大按钮<br><img src="http://img.blog.csdn.net/20160627165451830" alt="这里写图片描述"><br>然后选择一个内容体，点击create<br><img src="http://img.blog.csdn.net/20160627165543289" alt="这里写图片描述"><br>然后选择主题点击publish page<br>这时候我们就生成完毕了。<br>然后Github会给我们自动创建一个分支<br><img src="http://img.blog.csdn.net/20160627165639534" alt="这里写图片描述"><br>这时候我们在gh-pages里面打开设置，我们可以看到Github page已经创建完成，并且给我们生成了这个连接。<br><img src="http://img.blog.csdn.net/20160627165811003" alt="这里写图片描述"><br>到此为止我们的Github page已经创建完成。<br>这时候我们再来到hexo。<br>打开终端输入指令<code>hexo generate</code>会生成一套静态网页，在你创建hexo的文件夹下面生成了一个public文件夹，里面全部都是静态网页文件。<br>这时候我们创建一个文件夹作为Github的仓库。博主用的不是命令而是sourcetree，比较简单，然后我们打开sourcetree<br>， 创建新仓库，选择添加已存在的本地仓库<br><img src="http://img.blog.csdn.net/20160627170225614" alt="这里写图片描述"><br>路径就写你仓库的路径，然后创建完毕后打开，点击设置，将Github上的ssh地址拿到，<br><img src="http://img.blog.csdn.net/20160627170356193" alt="这里写图片描述"><br>然后创建远程仓库，将此ssh地址输进去即可。<br>这时候把刚才创建的public 文件夹下的文件全部复制进去，然后更新－－推送。如果出错那就是sourcetree没有关联此ssh, 那么我们重新写命令关联。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-add ~/.ssh/ID_rsa</div></pre></td></tr></table></figure>
+<p>后面跟着的就是你创建的ssh<br>然后推送上去，这时候在访问Github给你提供的地址就是你创建的这个hexo的index了。<br>现在再来说说绑定域名的问题。<br>域名可以在好多地方买到，我感觉最好不要在国外的网站买，怕不怕被墙？我选的是dnspod，进入官网需要注册一个，然后在里面购买一个域名，点击域名解析，如果你购买了域名它会自动给你创建，如果没有活着在别的途径购买点击添加域名即可，很简单。<br>然后点击添加记录，<br>@    A    192.30.252.153</p>
+<p>@    A    192.30.252.154</p>
+<p>www        CNAME    <em>*</em>.github.io<br>添加这三个地址，然后我们在回到Github里面找到我们的这个仓库，创建一个文件就叫CNAME，里面就写我们创建的域名即可。</p>
+<p>然后漫长的等待－－－－－－－－－－－－－－－</p>
+<p>等待解析完毕，就可以访问试试看了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://shine666.club/2017/07/25/Android事件的分发(二) /">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1591,7 +1858,7 @@ public static &lt;T&gt; void post(Message msg, T data){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

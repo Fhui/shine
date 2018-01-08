@@ -1,5 +1,7 @@
 ---
 title: Volley以及自定义Request详解
+date: 2016-05-18 19:09:00
+tags: Library
 ---
 
 <img src="http://i.imgur.com/cN4P4Af.png" width = "600" height = "300" align=center />

@@ -1,5 +1,6 @@
 ---
 title: EventBus消息类型重复解决方案 
+tags: Library
 ---
 
 <img src="http://i.imgur.com/1FbR8Ql.png" width = "600" height = "300" align=center />

@@ -32,6 +32,17 @@ new_post_name: :title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
+
+links:
+   Feng: http://gaofeng77.cn
+   郭霖: http://blog.csdn.net/guolin_blog/
+   Hongyang: http://blog.csdn.net/lmj623565791
+   夏安明: http://blog.csdn.net/xiaanming
+   Gank: http://gank.io/
+   匠心写作: http://gank.io/post/
+   TimAimee: http://timaimee.com/
+  
+
 filename_case: 0
 render_drafts: false
 post_asset_folder: false
@@ -73,6 +84,13 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: next
+
+#搜索功能实现
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

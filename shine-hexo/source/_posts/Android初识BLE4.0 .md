@@ -1,5 +1,6 @@
 ---
 title:  Android初识BLE4.0 
+tags: Android
 ---
 
 <img src="http://i.imgur.com/jHee7r9.jpg" width = "600" height = "300" align=center />

@@ -1,5 +1,6 @@
 ---
 title:  Android事件的分发(一) 
+tags: Android
 ---
 
 <img src="http://i.imgur.com/y1lLWjh.png" width = "600" height = "300" align=center />

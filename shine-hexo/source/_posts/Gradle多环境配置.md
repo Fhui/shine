@@ -1,5 +1,6 @@
 ---
 title: Gradle多环境配置
+tags: Gradle
 ---
 
 <img src="http://i.imgur.com/DUJ76kt.jpg" width = "600" height = "300" align=center />

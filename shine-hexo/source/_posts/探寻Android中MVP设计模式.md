@@ -1,5 +1,6 @@
 ---
 title: 探寻Android中MVP设计模式
+tags: Design pattern
 ---
 
 <img src="http://i.imgur.com/8KhioGQ.png" width = "600" height = "300" align=center />

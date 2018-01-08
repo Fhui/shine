@@ -1,5 +1,6 @@
 ---
 title: Android适配--dimen
+tags: Android
 ---
 
 <img src="http://i.imgur.com/aYn148O.jpg" width = "600" height = "300" align=center />

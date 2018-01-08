@@ -1,5 +1,6 @@
 ---
 title:  关于ListView数据显示错乱的解决方案  
+tags: Android
 ---
 
 <img src="http://i.imgur.com/lkqd2pb.png" width = "600" height = "300" align=center />

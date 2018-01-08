@@ -1,5 +1,6 @@
 ---
 title: RXJava入门
+tags: Library
 ---
 
 <img src="http://i.imgur.com/LbiBFu3.png" width = "600" height = "300" align=center />

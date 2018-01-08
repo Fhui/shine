@@ -1,5 +1,6 @@
 ---
 title: AndroidSocketClient开源库的使用 
+tags: Library
 ---
 
 <img src="http://i.imgur.com/se1WmJg.jpg" width = "600" height = "300" align=center />

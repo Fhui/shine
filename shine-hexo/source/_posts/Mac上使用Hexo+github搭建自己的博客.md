@@ -1,5 +1,6 @@
 ---
 title:  Mac上使用Hexo+github搭建自己的博客 
+tags: github
 ---
 
 <img src="http://i.imgur.com/Efu1afv.png" width = "600" height = "300" align=center />
